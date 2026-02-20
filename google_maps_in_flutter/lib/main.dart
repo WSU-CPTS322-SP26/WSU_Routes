@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_in_flutter/pages/preferences_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  //runApp(const MyApp());
+  runApp(PreferencesPage());
+
 }
 
 class MyApp extends StatefulWidget {
