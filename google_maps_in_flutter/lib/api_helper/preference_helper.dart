@@ -24,10 +24,26 @@ class PreferenceHelper
   static Future<int> ClubChange(bool newClub) async
   {
     final Map<String, dynamic> dataToSend = {
-    'notifOn': newClub,
+    'isClub': newClub,
     };
 
     final response = await http.put(Uri.parse("$baseUrl/profile/123/isClub"),      //ERROR WOULD NEED SOME WAY TO GET CURRENT PROFILE ID 
+      headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8', // Set content type
+        },
+        body: json.encode(dataToSend)
+      );
+    final data = jsonDecode(response.body);
+    return data["value"];
+  }
+
+  static Future<int> LocationPermissionChange(bool newLocationPermission) async
+  {
+    final Map<String, dynamic> dataToSend = {
+    'locationPermission': newLocationPermission,
+    };
+
+    final response = await http.put(Uri.parse("$baseUrl/profile/123/locationPermission"),      //ERROR WOULD NEED SOME WAY TO GET CURRENT PROFILE ID 
       headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8', // Set content type
         },

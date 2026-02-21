@@ -2,8 +2,9 @@ import '../api_helper/preference_helper.dart';
 
 class PreferencesController
 {
-  bool isNotif = true;
+  bool isNotif = true;//defaults, but once we have profile creation, will have get request to get the profile's preferences
   bool isClub = false;
+  bool locationPermission = true;
 
   Future<void> UpdateNotif(bool newNotif) async
   {
@@ -19,7 +20,12 @@ class PreferencesController
     PreferenceHelper.ClubChange(newClub);
   }
 
-
+  Future<void> UpdateLocationPermissions(bool newLocationPermission) async
+  {
+    locationPermission = newLocationPermission;
+    print(newLocationPermission);
+    PreferenceHelper.LocationPermissionChange(newLocationPermission);
+  }
 
 
 }

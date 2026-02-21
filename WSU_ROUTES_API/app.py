@@ -22,6 +22,8 @@ class Profile(dataBase.Model): #inital profile class
     email = dataBase.Column(dataBase.String)
     notifOn = dataBase.Column(dataBase.Boolean)
     isClub = dataBase.Column(dataBase.Boolean)
+    locationPermission = dataBase.Column(dataBase.Boolean)
+    password = dataBase.Column(dataBase.String)
 
 class Pin(dataBase.Model): #inital pin class
     __tablename__ = 'pins'
@@ -44,7 +46,7 @@ class Comment(dataBase.Model):
     userId = dataBase.Column(dataBase.String)
 
 with app.app_context():
-    #dataBase.drop_all() #can comment this out so the database isn't reset everytime, also database isn't in cloud rn, only on your system.
+    dataBase.drop_all() #can comment this out so the database isn't reset everytime, also database isn't in cloud rn, only on your system.
     dataBase.create_all()
 
 
@@ -65,7 +67,9 @@ def ProfilePage(id):
                     "name": curProfile.name,
                     "email": curProfile.email,
                     "notifOn": curProfile.notifOn,
-                    "isClub": curProfile.isClub
+                    "isClub": curProfile.isClub,
+                    "locationPermission": curProfile.locationPermission,
+                    "password": curProfile.password
                 }
             )
     return
@@ -108,7 +112,24 @@ def ProfileisClub(id):
             dataBase.session.commit()
     return ('', 204)
 
-
+@app.route("/profile/<id>/locationPermission", methods = ['GET', 'PUT'])
+def ProfilelocationPermission(id):
+    curProfile = Profile.query.filter(Profile.id == id).first()
+    if(request.method == 'GET'):
+        if curProfile is not None:
+            return jsonify(
+                {
+                    "locationPermission": curProfile.locationPermission,
+                }
+            )
+    elif(request.method == 'PUT'):
+        data = request.get_json()
+        if data is None:
+            return "No data",214
+        if curProfile is not None:
+            curProfile.locationPermission = data['locationPermission']
+            dataBase.session.commit()
+    return ('', 204)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)#very important on where you host on machine, this is localhost port 5000

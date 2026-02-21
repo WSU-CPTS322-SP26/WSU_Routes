@@ -17,19 +17,28 @@ class PrefState extends State<PreferencesPage>
   void onNotifChange(bool newVal) async {
     await controller.UpdateNotif(newVal);
 
-    setState(() {
-      // rebuild UI after controller updates value
-    });
+    update();
   }
 
   void onClubChange(bool newVal) async {
     await controller.UpdateClub(newVal);
 
-    setState(() {
-      // rebuild UI after controller updates value
-    });
+    update();
   }
 
+  void onLocationPerfChange(bool newVal) async
+  {
+    await controller.UpdateLocationPermissions(newVal);
+
+    update();
+  }
+
+  void update()
+  {
+    setState(() {
+          // rebuild UI after controller updates value
+        });
+  }
 
   @override 
   Widget build(BuildContext context)//how the widget looks
@@ -38,24 +47,57 @@ class PrefState extends State<PreferencesPage>
     (
         home: Scaffold(
               appBar: AppBar(title: const Text("SOME DEMO")),
-              body:Center(
+              body: Center(
                 child: 
                 Column
                 (
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "Notifications:",
-                      style: const TextStyle(fontSize: 24),
+                    Text(//title
+                      "Options and Preferences:", style: const TextStyle(fontSize:24)
                     ),
-                    const SizedBox(height: 20),
-                    Switch(value: controller.isNotif, onChanged: onNotifChange),//switch for notif
-                    Text(
-                      "Club Profile:",
-                      style: const TextStyle(fontSize: 24),
+                    Row(//For Notifications changes
+                      children: [
+                        Text(
+                          "Notifications:",
+                          style: const TextStyle(fontSize: 24),
+                        ),
+                        const SizedBox(height: 20),
+                        Switch(value: controller.isNotif, onChanged: onNotifChange),//switch for notif
+                      ]
                     ),
-                    const SizedBox(height: 20),
-                    Switch(value: controller.isClub, onChanged: onClubChange)//switch for club
+                    Row(//For change to club profile
+                      children: [
+                        Text(
+                          "Club Profile:",
+                          style: const TextStyle(fontSize: 24),
+                        ),
+                        const SizedBox(height: 20),
+                        Switch(value: controller.isClub, onChanged: onClubChange)//switch for club
+                      ]
+                    ),
+                    Row(//For change to location permissions
+                      children: [
+                        Text(
+                          "Give Location Permissions:",
+                          style: const TextStyle(fontSize: 24),
+                        ),
+                        const SizedBox(height: 20),
+                        Switch(value: controller.locationPermission, onChanged: onLocationPerfChange)//switch for club
+                      ]
+                    ),
+                    Row(//For change to location permissions
+                      children: [
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          child: const Text('Reset Password'),
+                          onPressed: () 
+                          {
+                            print('Will send out email to reset password');
+                          },
+                        )
+                      ]
+                    ),
                   ],
                 ),
               ),
