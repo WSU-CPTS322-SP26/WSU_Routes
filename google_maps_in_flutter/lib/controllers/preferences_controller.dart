@@ -12,6 +12,12 @@ class PreferencesController
     PreferenceHelper.NotifChange(newNotif);
   }
 
+  Future<void> UpdateClub(bool newClub) async
+  {
+    isClub = newClub;
+    print(newClub);
+    PreferenceHelper.ClubChange(newClub);
+  }
 
 
 

@@ -55,7 +55,7 @@ with app.app_context():
 #Queries
 
 @app.route("/profile/<id>", methods = ['GET'])
-def Profile(id):
+def ProfilePage(id):
     if(request.method == 'GET'):
         curProfile = Profile.query.filter(Profile.id == id).first() # 'function' object has no attribute 'query'
         if curProfile is not None:
@@ -84,9 +84,10 @@ def ProfileNotifOn(id):
         data = request.get_json()
         if data is None:
             return "No data",214
-        curProfile.notifOn = data['notifOn']
-        dataBase.session.commit()
-    return
+        if curProfile is not None:
+            curProfile.notifOn = data['notifOn']
+            dataBase.session.commit()
+    return ('', 204)
         
 @app.route("/profile/<id>/isClub", methods = ['GET', 'PUT'])
 def ProfileisClub(id):
@@ -102,9 +103,10 @@ def ProfileisClub(id):
         data = request.get_json()
         if data is None:
             return "No data",214
-        curProfile.isClub = data['isClub']
-        dataBase.session.commit()
-    return
+        if curProfile is not None:
+            curProfile.isClub = data['isClub']
+            dataBase.session.commit()
+    return ('', 204)
 
 
 

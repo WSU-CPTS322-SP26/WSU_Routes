@@ -22,6 +22,15 @@ class PrefState extends State<PreferencesPage>
     });
   }
 
+  void onClubChange(bool newVal) async {
+    await controller.UpdateClub(newVal);
+
+    setState(() {
+      // rebuild UI after controller updates value
+    });
+  }
+
+
   @override 
   Widget build(BuildContext context)//how the widget looks
   {
@@ -30,7 +39,9 @@ class PrefState extends State<PreferencesPage>
         home: Scaffold(
               appBar: AppBar(title: const Text("SOME DEMO")),
               body:Center(
-                child: Column(
+                child: 
+                Column
+                (
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
@@ -38,9 +49,15 @@ class PrefState extends State<PreferencesPage>
                       style: const TextStyle(fontSize: 24),
                     ),
                     const SizedBox(height: 20),
-                    Switch(value: controller.isNotif, onChanged: onNotifChange)
+                    Switch(value: controller.isNotif, onChanged: onNotifChange),//switch for notif
+                    Text(
+                      "Club Profile:",
+                      style: const TextStyle(fontSize: 24),
+                    ),
+                    const SizedBox(height: 20),
+                    Switch(value: controller.isClub, onChanged: onClubChange)//switch for club
                   ],
-                )
+                ),
               ),
             )
     );
