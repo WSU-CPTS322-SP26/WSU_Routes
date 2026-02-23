@@ -22,14 +22,14 @@ class Profile(dataBase.Model): #inital profile class
     id = dataBase.Column(dataBase.String, primary_key=True, unique=True, nullable=False) #different from event and pin id
     name = dataBase.Column(dataBase.String)
     email = dataBase.Column(dataBase.String)
-    notifOn = dataBase.Column(dataBase.Bool)
-    isClub = dataBase.Column(dataBase.Bool)
+    notifOn = dataBase.Column(dataBase.Boolean)
+    isClub = dataBase.Column(dataBase.Boolean)
 
 class Pin(dataBase.Model): #inital pin class
     __tablename__ = 'pins'
     id = dataBase.Column(dataBase.String, primary_key=True, unique=True, nullable=False) #different from event and profile id
     name = dataBase.Column(dataBase.String)
-    isPublic = dataBase.Column(dataBase.Bool)
+    isPublic = dataBase.Column(dataBase.Boolean)
     locationLat = dataBase.Column(dataBase.Float)
     locationLong = dataBase.Column(dataBase.Float)
 
