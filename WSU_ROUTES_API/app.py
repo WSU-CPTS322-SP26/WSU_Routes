@@ -38,6 +38,8 @@ class Event(dataBase.Model):
     id = dataBase.Column(dataBase.String, primary_key=True, unique=True, nullable=False) #different from pin and profile id
     name = dataBase.Column(dataBase.String)
     pinId = dataBase.Column(dataBase.String) 
+    isPublic = dataBase.Column(dataBase.Boolean)
+    date = pinId = dataBase.Column(dataBase.String) #Maybe just in format MM/DD/YYYY
 
 class Comment(dataBase.Model):
     __tablename__ = 'comments'
@@ -130,6 +132,28 @@ def ProfilelocationPermission(id):
             curProfile.locationPermission = data['locationPermission']
             dataBase.session.commit()
     return ('', 204)
+
+@app.route("/events/public", methods = ['GET'])
+def GetPubEvents():
+    events = Event.query.filter(Event.isPublic == True).all()
+    response = {}
+    num = 0
+    if(request.method == 'GET' and events): #checks if is a get request and if events isn't empty
+        for i in events:#could break here, not correct syntax maybe
+            response += {
+                "id" + str(i): events[i].id,
+                "name" + str(i): events[i].name,
+                "pinId" + str(i): events[i].pinId,
+                "date" + str(i): events[i].date,
+
+            }
+            num += 1
+        response += {"count": num}    
+        print(response) # to check
+        return jsonify(response)
+    else:
+        return ('', 204)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)#very important on where you host on machine, this is localhost port 5000
