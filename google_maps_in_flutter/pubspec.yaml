@@ -37,6 +37,11 @@ dependencies:
   cupertino_icons: ^1.0.8
   google_maps_flutter: ^2.14.0
 
+  firebase_core: ^2.25.4
+  firebase_auth: ^4.17.4
+  cloud_firestore: ^4.15.4
+  google_sign_in: ^5.4.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -89,3 +94,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+

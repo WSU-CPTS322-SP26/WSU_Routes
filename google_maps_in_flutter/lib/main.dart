@@ -2,11 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_in_flutter/pages/preferences_page.dart';
 
-void main() {
-  //runApp(const MyApp());
-  runApp(PreferencesPage());
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp( //load firebase before running app
+    options: DefaultFirebaseOptions.currentPlatform
+  );
+
+  runApp(const MyApp());
+  //runApp(PreferencesPage());
+  
 }
+
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});

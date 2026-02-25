@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1048336534814",
+    "project_id": "wsuroutes-9d442",
+    "storage_bucket": "wsuroutes-9d442.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1048336534814:android:6ebd447c74eea792194d0f",
+        "android_client_info": {
+          "package_name": "com.example.google_maps_in_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBA0BNLgDf6CbjIPiMlWN8DmTpnT8PgjDM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
