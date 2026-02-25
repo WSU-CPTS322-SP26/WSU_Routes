@@ -3,8 +3,8 @@ import '../container_classes/event.dart';
 
 class EventsController
 {
-  Future<List<Event>> InitalPublicEvents() async
+  Future<void> InitalPublicEvents(List<Event> list) async
   {
-    return EventsHelper.GetPublicEvents();
+    list = await EventsHelper.GetPublicEvents();
   }
 }

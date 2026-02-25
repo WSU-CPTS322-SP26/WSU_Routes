@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_in_flutter/pages/events_page.dart';
 import 'package:google_maps_in_flutter/pages/preferences_page.dart';
 
 void main() {
   //runApp(const MyApp());
-  runApp(PreferencesPage());
+  //runApp(PreferencesPage());
+  runApp(EventsPage());
 
 }
 
