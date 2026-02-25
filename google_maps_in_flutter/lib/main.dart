@@ -4,6 +4,7 @@ import 'package:google_maps_in_flutter/pages/preferences_page.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 void main() async{
@@ -17,6 +18,28 @@ void main() async{
   
 }
 
+//WORK ON ADDING MAP AFTER LOGIN PAGE,, v
+
+class AuthGate extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(body: Center(child: CircularProgressIndicator()));
+        }
+
+        if (!snapshot.hasData) {
+          return LoginPage(); //direct to a login page if logged out
+        }
+
+        return HomePage(); //go to home/map if logged in 
+      },
+    );
+  }
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -41,7 +64,8 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
         colorSchemeSeed: Colors.green[700],
       ),
-      home: Scaffold(
+      home:AuthGate(),
+     /*  home: Scaffold(
         appBar: AppBar(
           title: const Text('Maps Sample App'),
           elevation: 2,
@@ -53,7 +77,7 @@ class _MyAppState extends State<MyApp> {
             zoom: 17.0,
           ),
         ),
-      ),
+      ), */
     );
   }
 }
