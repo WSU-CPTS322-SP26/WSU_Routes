@@ -39,7 +39,7 @@ class Event(dataBase.Model):
     name = dataBase.Column(dataBase.String)
     pinId = dataBase.Column(dataBase.String) 
     isPublic = dataBase.Column(dataBase.Boolean)
-    date = pinId = dataBase.Column(dataBase.String) #Maybe just in format MM/DD/YYYY
+    date = dataBase.Column(dataBase.String) #Maybe just in format MM/DD/YYYY
 
 class Comment(dataBase.Model):
     __tablename__ = 'comments'
@@ -54,8 +54,20 @@ with app.app_context():
 
 #code run
 
-#supplemental code will go here
+#write this
+def GenerateID():#will update
+    return '1'
 
+#write this
+def CreateEvent(name, isPublic, date):
+    tempEvent = Event.query.filter(Event.id == 'SOMEID').first() # 'function' object has no attribute 'query'
+    if not tempEvent:
+        newEvent = Event(id= name, name=name, pinId = GenerateID(), isPublic=isPublic, date=date)#need to change id to actually be some generated ID
+        dataBase.session.add(newEvent)
+        dataBase.session.commit()
+    else:
+        print('ALREADY HAVE EVENT WITH ID')
+    
 #Queries
 
 @app.route("/profile/<id>", methods = ['GET'])
@@ -133,24 +145,31 @@ def ProfilelocationPermission(id):
             dataBase.session.commit()
     return ('', 204)
 
-@app.route("/events/public", methods = ['GET'])
+@app.route("/events/public", methods = ['GET', 'POST'])
 def GetPubEvents():
-    events = Event.query.filter(Event.isPublic == True).all()
+    events = Event.query.filter(Event.isPublic == True).order_by(Event.date).all()
     response = {}
     num = 0
     if(request.method == 'GET' and events): #checks if is a get request and if events isn't empty
-        for i in events:#could break here, not correct syntax maybe
-            response += {
-                "id" + str(i): events[i].id,
-                "name" + str(i): events[i].name,
-                "pinId" + str(i): events[i].pinId,
-                "date" + str(i): events[i].date,
+        for event in events:#could break here, not correct syntax maybe
+            response.update({
+                "id" + str(num): event.id,
+                "name" + str(num): event.name,
+                "pinId" + str(num): event.pinId,
+                "date" + str(num): event.date,
 
-            }
+            })
             num += 1
-        response += {"count": num}    
+        response.update({"count": num}) 
         print(response) # to check
         return jsonify(response)
+    elif(request.method == 'POST'):
+        data = request.get_json()
+        if data is None:
+            return "No data",214
+        else:
+            CreateEvent(data['name'], data['isPublic'], data['date'])
+            return ('', 200)
     else:
         return ('', 204)
 

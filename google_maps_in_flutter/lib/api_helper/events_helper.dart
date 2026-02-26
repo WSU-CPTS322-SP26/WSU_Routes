@@ -15,7 +15,7 @@ class EventsHelper
       );
 
     final data = jsonDecode(response.body);
-    for(int i = 1; i < data["count"]; i++)//could break here
+    for(int i = 0; i < data["count"]; i++)//could break here
     {
       tempEvent = new Event();
       tempEvent.id = data["id" + i.toString()];
@@ -23,22 +23,27 @@ class EventsHelper
       tempEvent.pinId = data["pinId" + i.toString()];
       tempEvent.date = data["date" + i.toString()];
       dataToSend.add(tempEvent);
+      //print(tempEvent.formatToPrint()); // knows we get here correctly
     }
 
     return dataToSend;
   }
 
-  static void PostNewEvents(Event dataToCommit) async
+  static Future<void> PostNewEvents(Event dataToCommit) async
   {
-
-    final response = await http.put(Uri.parse("$baseUrl/profile/123/locationPermission"),      //ERROR WOULD NEED SOME WAY TO GET CURRENT PROFILE ID 
+    final response = await http.post(Uri.parse("$baseUrl/events/public"),      //ERROR WOULD NEED SOME WAY TO GET CURRENT PROFILE ID 
       headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8', // Set content type
         },
-        body: json.encode(dataToCommit)//i don't think that lists convert to json like this
+        body: jsonEncode({
+          'name': dataToCommit.name,
+          'isPublic': dataToCommit.isPublic,
+          'date': dataToCommit.date
+        })
       );
 
   }
+
 
 }
 

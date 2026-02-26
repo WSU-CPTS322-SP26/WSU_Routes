@@ -5,6 +5,15 @@ class EventsController
 {
   Future<void> InitalPublicEvents(List<Event> list) async
   {
-    list = await EventsHelper.GetPublicEvents();
+    list.clear();
+    list.addAll(await EventsHelper.GetPublicEvents());
   }
+
+  Future<void> PostEvent(Event event) async
+  {
+    await EventsHelper.PostNewEvents(event);
+  }
+
+
+
 }

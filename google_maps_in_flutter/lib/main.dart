@@ -6,7 +6,11 @@ import 'package:google_maps_in_flutter/pages/preferences_page.dart';
 void main() {
   //runApp(const MyApp());
   //runApp(PreferencesPage());
-  runApp(EventsPage());
+  runApp(
+    MaterialApp(
+      home: EventsPage(),
+    )
+  );
 
 }
 
