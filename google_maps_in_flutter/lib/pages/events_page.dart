@@ -21,13 +21,12 @@ class EventState extends State<EventsPage>
   void initState()
   {
     super.initState();
-
-    
+    loadInitalEvents();
   }
 
   void loadInitalEvents() async
   {
-    controller.InitalPublicEvents(list);//populates list
+    await controller.InitalPublicEvents(list);//populates list
     update();
   }
 
@@ -39,16 +38,26 @@ class EventState extends State<EventsPage>
     update();
   }
 
+  Future<void> GetDate(TextEditingController dateController) async {
+    DateTime? date = await showDatePicker
+    (context: context, firstDate: DateTime.now(), lastDate: DateTime(2050), initialDate: DateTime.now(),);
+
+    if(date != null)
+    {
+      setState(() {
+        dateController.text = date.toString().split(' ')[0];
+      });
+    }
+  }
+
   void update()
   {
     setState(() {
           // rebuild UI after controller updates value
         });
   }
-/////////////////////////////FROM LIST OF EVENTS NEED TO POPULATE UI WITH THE EVENTS SO CAN SEE THEM!!!!!!!!!!!!!!!!//////////// 
-////ALSO NEED UI OPTION TO ADD EVENT AND FILL WITH PROPER DATA!!!!!!!!!!!!!!!
-///THEN THAT GETS UPDATED TO DB!!!!!!!!!!!!!!!!!
-    @override 
+
+  @override 
   Widget build(BuildContext context)//how the widget looks
   {
     return MaterialApp
@@ -63,15 +72,6 @@ class EventState extends State<EventsPage>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: 
                   [
-                    ...List.generate(
-                      list.length,
-                      (index) => Row(
-                        children: [
-                            Text('NAME: ${list[index].name}, DATE: ${list[index].date}')
-                        ],
-                      )
-                    ),
-
                     Row(children: [
                       ElevatedButton(onPressed: () { 
                       showDialog(
@@ -80,6 +80,8 @@ class EventState extends State<EventsPage>
                         {
                             TextEditingController nameController = TextEditingController();
                             TextEditingController dateController = TextEditingController();
+                            TextEditingController descriptionController = TextEditingController();
+
                             bool isPublicTemp = true;
 
                             return StatefulBuilder(builder: (context, setStateDialog)
@@ -99,14 +101,25 @@ class EventState extends State<EventsPage>
                                   }),
                                   Text("Date:"),
                                   TextField(
+                                    decoration: const InputDecoration(prefixIcon: Icon(Icons.calendar_today), labelText: "DATE"),
                                     controller: dateController,
+                                    readOnly: true,
+                                    onTap: () {
+                                      GetDate(dateController);
+                                    },
                                   ),
+                                  Text("Description:"),
+                                  TextField(
+                                    controller: descriptionController,
+                                  ),
+
 
                                   ElevatedButton(onPressed: () {
                                     tempEvent = Event();
                                     tempEvent.name = nameController.text;
                                     tempEvent.isPublic = isPublicTemp;
                                     tempEvent.date = dateController.text;
+                                    tempEvent.description = descriptionController.text;
                                     onCreateEvent();
                                   }, child: Text("Submit")),
                                 ]
@@ -118,8 +131,17 @@ class EventState extends State<EventsPage>
                       );
                       },
                       child: Text('Add Event'))
-                    ],)
-                    
+                    ],),
+
+                    ...List.generate(
+                      list.length,
+                      (index) => Row(
+                        children: [
+                            Text('NAME: ${list[index].name}, DATE: ${list[index].date}\nDESCRIPTION: ${list[index].description}'),
+                        ],
+                      )
+                      
+                    ),
                   ],
 
                 ),

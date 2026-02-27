@@ -22,6 +22,8 @@ class EventsHelper
       tempEvent.name = data["name" + i.toString()];
       tempEvent.pinId = data["pinId" + i.toString()];
       tempEvent.date = data["date" + i.toString()];
+      tempEvent.description = data["description" + i.toString()];
+      
       dataToSend.add(tempEvent);
       //print(tempEvent.formatToPrint()); // knows we get here correctly
     }
@@ -38,7 +40,8 @@ class EventsHelper
         body: jsonEncode({
           'name': dataToCommit.name,
           'isPublic': dataToCommit.isPublic,
-          'date': dataToCommit.date
+          'date': dataToCommit.date,
+          'description': dataToCommit.description
         })
       );
 

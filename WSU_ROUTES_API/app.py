@@ -40,6 +40,7 @@ class Event(dataBase.Model):
     pinId = dataBase.Column(dataBase.String) 
     isPublic = dataBase.Column(dataBase.Boolean)
     date = dataBase.Column(dataBase.String) #Maybe just in format MM/DD/YYYY
+    description = dataBase.Column(dataBase.String)
 
 class Comment(dataBase.Model):
     __tablename__ = 'comments'
@@ -59,10 +60,10 @@ def GenerateID():#will update
     return '1'
 
 #write this
-def CreateEvent(name, isPublic, date):
-    tempEvent = Event.query.filter(Event.id == 'SOMEID').first() # 'function' object has no attribute 'query'
+def CreateEvent(name, isPublic, date, description):
+    tempEvent = Event.query.filter(Event.id == 'name').first() # 'function' object has no attribute 'query'
     if not tempEvent:
-        newEvent = Event(id= name, name=name, pinId = GenerateID(), isPublic=isPublic, date=date)#need to change id to actually be some generated ID
+        newEvent = Event(id= name, name=name, pinId = GenerateID(), isPublic=isPublic, date=date, description=description)#need to change id to actually be some generated ID
         dataBase.session.add(newEvent)
         dataBase.session.commit()
     else:
@@ -157,6 +158,7 @@ def GetPubEvents():
                 "name" + str(num): event.name,
                 "pinId" + str(num): event.pinId,
                 "date" + str(num): event.date,
+                "description" + str(num): event.description
 
             })
             num += 1
@@ -168,7 +170,7 @@ def GetPubEvents():
         if data is None:
             return "No data",214
         else:
-            CreateEvent(data['name'], data['isPublic'], data['date'])
+            CreateEvent(data['name'], data['isPublic'], data['date'], data['description'])
             return ('', 200)
     else:
         return ('', 204)

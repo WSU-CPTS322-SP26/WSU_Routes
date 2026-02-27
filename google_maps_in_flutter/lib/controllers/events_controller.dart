@@ -6,7 +6,8 @@ class EventsController
   Future<void> InitalPublicEvents(List<Event> list) async
   {
     list.clear();
-    list.addAll(await EventsHelper.GetPublicEvents());
+    final events = await EventsHelper.GetPublicEvents();
+    list.addAll(events);
   }
 
   Future<void> PostEvent(Event event) async

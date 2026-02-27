@@ -6,6 +6,7 @@ class Event
   String pinId = "";
   bool isPublic = false;
   String date = "";
+  String description = "";
 
   String formatToPrint()
   {
