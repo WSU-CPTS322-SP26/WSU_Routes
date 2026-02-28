@@ -38,6 +38,9 @@ class Event(dataBase.Model):
     id = dataBase.Column(dataBase.String, primary_key=True, unique=True, nullable=False) #different from pin and profile id
     name = dataBase.Column(dataBase.String)
     pinId = dataBase.Column(dataBase.String) 
+    isPublic = dataBase.Column(dataBase.Boolean)
+    date = dataBase.Column(dataBase.String) #Maybe just in format MM/DD/YYYY
+    description = dataBase.Column(dataBase.String)
 
 class Comment(dataBase.Model):
     __tablename__ = 'comments'
@@ -52,8 +55,20 @@ with app.app_context():
 
 #code run
 
-#supplemental code will go here
+#write this
+def GenerateID():#will update
+    return '1'
 
+#write this
+def CreateEvent(name, isPublic, date, description):
+    tempEvent = Event.query.filter(Event.id == 'name').first() # 'function' object has no attribute 'query'
+    if not tempEvent:
+        newEvent = Event(id= name, name=name, pinId = GenerateID(), isPublic=isPublic, date=date, description=description)#need to change id to actually be some generated ID
+        dataBase.session.add(newEvent)
+        dataBase.session.commit()
+    else:
+        print('ALREADY HAVE EVENT WITH ID')
+    
 #Queries
 
 @app.route("/profile/<id>", methods = ['GET'])
@@ -130,6 +145,36 @@ def ProfilelocationPermission(id):
             curProfile.locationPermission = data['locationPermission']
             dataBase.session.commit()
     return ('', 204)
+
+@app.route("/events/public", methods = ['GET', 'POST'])
+def GetPubEvents():
+    events = Event.query.filter(Event.isPublic == True).order_by(Event.date).all()
+    response = {}
+    num = 0
+    if(request.method == 'GET' and events): #checks if is a get request and if events isn't empty
+        for event in events:#could break here, not correct syntax maybe
+            response.update({
+                "id" + str(num): event.id,
+                "name" + str(num): event.name,
+                "pinId" + str(num): event.pinId,
+                "date" + str(num): event.date,
+                "description" + str(num): event.description
+
+            })
+            num += 1
+        response.update({"count": num}) 
+        print(response) # to check
+        return jsonify(response)
+    elif(request.method == 'POST'):
+        data = request.get_json()
+        if data is None:
+            return "No data",214
+        else:
+            CreateEvent(data['name'], data['isPublic'], data['date'], data['description'])
+            return ('', 200)
+    else:
+        return ('', 204)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)#very important on where you host on machine, this is localhost port 5000

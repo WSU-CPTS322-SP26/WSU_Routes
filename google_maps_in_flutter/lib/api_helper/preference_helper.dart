@@ -52,4 +52,16 @@ class PreferenceHelper
     final data = jsonDecode(response.body);
     return data["value"];
   }
+
+  static Future<bool> GetisNotif(String id) async
+  {
+    final response = await http.get(Uri.parse("$baseUrl/profile/$id/notifOn"),      //ERROR WOULD NEED SOME WAY TO GET CURRENT PROFILE ID 
+      headers: {
+          'Content-Type': 'application/json; charset=UTF-8', // Set content type
+        },
+      );
+    final data = jsonDecode(response.body);
+    return data["notifOn"];
+  }
+
 }
