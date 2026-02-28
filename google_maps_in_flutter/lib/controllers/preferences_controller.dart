@@ -27,5 +27,4 @@ class PreferencesController
     PreferenceHelper.LocationPermissionChange(newLocationPermission);
   }
 
-
 }
