@@ -38,6 +38,9 @@ class Event(dataBase.Model):
     id = dataBase.Column(dataBase.String, primary_key=True, unique=True, nullable=False) #different from pin and profile id
     name = dataBase.Column(dataBase.String)
     pinId = dataBase.Column(dataBase.String) 
+    isPublic = dataBase.Column(dataBase.Boolean)
+    date = dataBase.Column(dataBase.String) #Maybe just in format MM/DD/YYYY
+    description = dataBase.Column(dataBase.String)
 
 class Comment(dataBase.Model):
     __tablename__ = 'comments'
@@ -52,8 +55,20 @@ with app.app_context():
 
 #code run
 
-#supplemental code will go here
+#write this
+def GenerateID():#will update
+    return '1'
 
+#write this
+def CreateEvent(name, isPublic, date, description):
+    tempEvent = Event.query.filter(Event.id == 'name').first() # 'function' object has no attribute 'query'
+    if not tempEvent:
+        newEvent = Event(id= name, name=name, pinId = GenerateID(), isPublic=isPublic, date=date, description=description)#need to change id to actually be some generated ID
+        dataBase.session.add(newEvent)
+        dataBase.session.commit()
+    else:
+        print('ALREADY HAVE EVENT WITH ID')
+    
 #Queries
 
 @app.route("/profile/<id>", methods = ['GET'])

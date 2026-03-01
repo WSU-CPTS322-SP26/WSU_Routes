@@ -48,3 +48,6 @@ app.*.map.json
 venv/
 __pycache__/
 *.pyc
+
+#To prevent conflicts with db files  
+WSU_ROUTES_API/instance/*.db

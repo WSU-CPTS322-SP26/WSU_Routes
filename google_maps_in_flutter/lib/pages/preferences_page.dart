@@ -45,7 +45,7 @@ class PrefState extends State<PreferencesPage>
     return MaterialApp
     (
         home: Scaffold(
-              appBar: AppBar(title: const Text("SOME DEMO")),
+              appBar: AppBar(title: const Text("Prefences Page")),
               body: Center(
                 child: 
                 Column
