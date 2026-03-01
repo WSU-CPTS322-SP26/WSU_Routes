@@ -1,0 +1,46 @@
+User Stories: 
+
+1. As a WSU alumni, I want accurate directions and display of my campus so I can efficiently navigate to buildings
+
+Acceptance Criteria: 
+
+1.1 - Buildings review (map displays campus buildings accurately)
+
+X-Accurate google maps integration 
+
+-Building intractability - more detailed data on buildings (hours, notices, etc.), saved in database or can be modified
+
+2. As a WSURoutes user, I want my app to be customizable and adapt to my preferences
+
+Acceptance Criteria:
+
+X-Preferences page/widget on app interface
+
+-Notifications settings
+
+-Privacy settings
+
+3. As a WSU Alumni and app user, I want my data to be secure and for settings to be coordinated with my email account
+
+Acceptance Criteria:
+
+-Google/email authentication
+
+X-User data connected and saved to backend data base
+
+X-Ability to clear user data
+
+-Security features to prevent data leaks
+
+4. As a WSU student, I want to know what events are occurring on campus and make social connections
+
+Acceptance Criteria:
+
+-Pin features (can post individual locations)
+
+-Clubs can post event/meeting locations and times
+
+-Social events can be integrated with individual schedules
+
+X-Public and private events 
+
