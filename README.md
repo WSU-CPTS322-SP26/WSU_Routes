@@ -85,4 +85,4 @@ the map has not yet been implemented. The app has to be restarted to return to m
 ## Additional Documentation
 * [Sprint 1 User Stories](UserStories.txt) 
 * [Sprint 1 Report](Sprint1Report.md) 
-* Demo Video Link: (TBA)
+* Demo Video: (https://www.youtube.com/watch?v=KJVz4lCVOP8)
