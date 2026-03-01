@@ -33,29 +33,29 @@ subfeatures, the following of which were completed in this sprint:
 
 ## Incomplete Issues/User Stories
 Here are links to issues we worked on but did not complete in this sprint:
-* Issue 3.3 and 2.4 <<Needed to test database more before integrating>>
-* Issue 3.1 and 3.4 <<Have not yet learned how to verify emails>>
-* Issue 4.2-4.4 <<Need to implement current location feature before implementing>>
+* Issue 3.3 and 2.3 - https://github.com/WSU-CPTS322-SP26/WSU_Routes/issues/3. Needed to test the database more before integrating.
+* Issue 3.1 and 3.4 - https://github.com/WSU-CPTS322-SP26/WSU_Routes/issues/2. Have not yet learned how to verify emails
+* Issue 4.2-4.3 - https://github.com/WSU-CPTS322-SP26/WSU_Routes/issues/8. Need to implement current location feature before implementing
 
 ## Code Files for Review
 All repo files were created during this sprint, however the following
 files are the most crucial components added.
 
-* [main.dart](google_maps_in_flutter/lib/main.dart)
-* [app.py](WSU_ROUTES_API/app.py)
-* [preferences_page.dart](google_maps_in_flutter/lib/pages/preferences_page.dart)
-* [login_page.dart](google_maps_in_flutter/lib/pages/login_page.dart)
-* [events_page.dart](google_maps_in_flutter/lib/pages/events_page.dart)
+* [main.dart] - https://github.com/WSU-CPTS322-SP26/WSU_Routes/blob/main/google_maps_in_flutter/lib/main.dart
+* [app.py] - https://github.com/WSU-CPTS322-SP26/WSU_Routes/blob/main/WSU_ROUTES_API/app.py
+* [preferences_page.dart] - https://github.com/WSU-CPTS322-SP26/WSU_Routes/blob/main/google_maps_in_flutter/lib/pages/preferences_page.dart
+* [login_page.dart] - https://github.com/WSU-CPTS322-SP26/WSU_Routes/blob/main/google_maps_in_flutter/lib/pages/login_page.dart
+* [events_page.dart] - https://github.com/WSU-CPTS322-SP26/WSU_Routes/blob/main/google_maps_in_flutter/lib/pages/events_page.dart
 
 ## Retrospective Summary
 Here's what went well:
 * Documentation
 * Version Control
-* Time Management
+* Time Management\
 Here's what we'd like to improve:
 * More Organized kanban board to clearly reflect User Stories
 * Repo Organization
-* Debugging/Testing Conventions
+* Debugging/Testing Conventions\
 Here are changes we plan to implement in the next sprint:
 * Improve UI/UX and minor bugs with current features
 * Add pins and current location
