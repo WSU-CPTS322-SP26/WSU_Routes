@@ -6,41 +6,41 @@ Acceptance Criteria:
 
 1.1 - Buildings review (map displays campus buildings accurately)
 
-X-Accurate google maps integration 
+1.2 - Completed - Accurate google maps integration 
 
--Building intractability - more detailed data on buildings (hours, notices, etc.), saved in database or can be modified
+1.3 - Completed - Building intractability - more detailed data on buildings (hours, notices, etc.), saved in database or can be modified
 
 2. As a WSURoutes user, I want my app to be customizable and adapt to my preferences
 
 Acceptance Criteria:
 
-X-Preferences page/widget on app interface
+2.1 - Completed - Preferences page/widget on app interface
 
--Notifications settings
+2.2 - Notifications settings
 
--Privacy settings
+2.3 - Privacy settings
 
 3. As a WSU Alumni and app user, I want my data to be secure and for settings to be coordinated with my email account
 
 Acceptance Criteria:
 
--Google/email authentication
+3.1 - Google/email authentication
 
-X-User data connected and saved to backend data base
+3.2 - Completed - User data connected and saved to backend database
 
-X-Ability to clear user data
+3.3 - Completed - Ability to clear user data
 
--Security features to prevent data leaks
+3.4 - Security features to prevent data leaks
 
 4. As a WSU student, I want to know what events are occurring on campus and make social connections
 
 Acceptance Criteria:
 
--Pin features (can post individual locations)
+4.1 - Pin features (can post individual locations)
 
--Clubs can post event/meeting locations and times
+4.2 - Clubs can post event/meeting locations and times
 
--Social events can be integrated with individual schedules
+4.3 - Social events can be integrated with individual schedules
 
-X-Public and private events 
+4.4 - Completed - Public and private events 
 
