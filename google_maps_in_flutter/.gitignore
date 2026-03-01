@@ -43,3 +43,11 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+#ignore venv for python scripts
+venv/
+__pycache__/
+*.pyc
+
+#To prevent conflicts with db files  
+WSU_ROUTES_API/instance/*.db

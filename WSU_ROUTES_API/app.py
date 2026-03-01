@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, jsonify, render_template, url_for, redirect, Response, make_response
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-
+import uuid #for generating unique ids for profiles, pins, and events
 #setup for database
 
 app = Flask(__name__)
@@ -146,35 +146,55 @@ def ProfilelocationPermission(id):
             dataBase.session.commit()
     return ('', 204)
 
-@app.route("/events/public", methods = ['GET', 'POST'])
-def GetPubEvents():
-    events = Event.query.filter(Event.isPublic == True).order_by(Event.date).all()
-    response = {}
-    num = 0
-    if(request.method == 'GET' and events): #checks if is a get request and if events isn't empty
-        for event in events:#could break here, not correct syntax maybe
-            response.update({
-                "id" + str(num): event.id,
-                "name" + str(num): event.name,
-                "pinId" + str(num): event.pinId,
-                "date" + str(num): event.date,
-                "description" + str(num): event.description
 
-            })
-            num += 1
-        response.update({"count": num}) 
-        print(response) # to check
-        return jsonify(response)
-    elif(request.method == 'POST'):
-        data = request.get_json()
-        if data is None:
-            return "No data",214
-        else:
-            CreateEvent(data['name'], data['isPublic'], data['date'], data['description'])
-            return ('', 200)
-    else:
-        return ('', 204)
+@app.route("/register", methods = ['POST'])
+def register():
+    data = request.get_json()
+
+    email = data.get("email")
+    password = data.get("password")
+    name = data.get("name")
+
+    existing_user = Profile.query.filter_by(email=email).first()
+    if existing_user:
+        return jsonify({"error": "This user already exists"}), 400
+    
+    new_user = Profile(
+        id=str(uuid.uuid4()),
+        name=name,
+        email=email,
+        password=password,
+        notifOn=True,
+        isClub=False,
+        locationPermission=False
+    )
+    dataBase.session.add(new_user)
+    dataBase.session.commit()
+
+    return jsonify({"id": new_user.id}), 200
+
+@app.route("/login", methods = ['GET'])
+def login():
+    data = request.get_json()
+
+    email = data.get("email")
+    password = data.get("password")
+
+    existing_user = Profile.query.filter_by(email=email).first()
+
+    if existing_user and existing_user.password == password:
+        return jsonify({
+            "message": "Welcome back " + existing_user.name,
+        }), 200
+
+    return jsonify({"error": "Invalid email or password"}), 401
 
 
 if __name__ == "__main__":
+
+    print("REGISTERED ROUTES:") #print for debugging
+    for rule in app.url_map.iter_rules():
+        print(rule)
+
+    
     app.run(host="0.0.0.0", port=5000)#very important on where you host on machine, this is localhost port 5000
