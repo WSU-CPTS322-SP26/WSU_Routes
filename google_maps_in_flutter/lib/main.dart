@@ -4,6 +4,7 @@ import 'package:google_maps_in_flutter/pages/events_page.dart';
 import 'package:google_maps_in_flutter/pages/preferences_page.dart';
 import 'package:google_maps_in_flutter/pages/login_page.dart';
 
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
 
