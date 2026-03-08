@@ -2,3 +2,5 @@
 *.db
 #hunters test projects (dont commit to main)
 hunter_test/
+.idea/
+.vscode/
