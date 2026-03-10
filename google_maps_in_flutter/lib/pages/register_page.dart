@@ -1,23 +1,22 @@
+///working to differentiate login and register page
+
 import 'package:flutter/material.dart';
-import 'package:google_maps_in_flutter/pages/register_page.dart';
+import 'package:google_maps_in_flutter/pages/login_page.dart';
 import 'dart:convert';
 import'package:http/http.dart' as http;
 import 'package:google_maps_in_flutter/main.dart';
 
-//currently working to separate login and register page (to implement email auth, password reset, etc.)
-
-
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage>{
+class _RegisterPageState extends State<RegisterPage>{
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  //bool isLogin = true; 
 
   Future<void> submit() async {
     print("Submission function called"); 
@@ -26,7 +25,7 @@ class _LoginPageState extends State<LoginPage>{
     final password = passwordController.text.trim();
 
     final url = Uri.parse( //http request
-        "http://10.0.2.2:5000/login"
+        "http://10.0.2.2:5000/register"
     );
 
     try{
@@ -46,7 +45,7 @@ class _LoginPageState extends State<LoginPage>{
       print("BODY: ${response.body}");
 
 
-      if(response.statusCode == 200) { //if login/register successful
+      if(response.statusCode == 200) { //if register successful
         
         Navigator.pushReplacement(
           context,
@@ -65,7 +64,7 @@ class _LoginPageState extends State<LoginPage>{
   @override
   Widget build(BuildContext context){
     return Scaffold(  
-      appBar: AppBar(title: Text("Login")),
+      appBar: AppBar(title: Text("Register")),
       body: Padding(   
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -85,17 +84,17 @@ class _LoginPageState extends State<LoginPage>{
                 print("Confirm button press");
                 submit();
               },
-              child: Text("Login"),
+              child: Text("Register"),
             ),
             TextButton( 
               onPressed: (){
               Navigator.pushReplacement( //if create acc button clicked, route to register page
               context,
-              MaterialPageRoute(builder: (_) => const RegisterPage()),
+              MaterialPageRoute(builder: (_) => const LoginPage()),
               );
               },
               child: Text(
-                  "Create an account"
+                  "Login to Account"
               ),
             )
           ]
@@ -103,4 +102,5 @@ class _LoginPageState extends State<LoginPage>{
       ),
     );
   }
+
 }
