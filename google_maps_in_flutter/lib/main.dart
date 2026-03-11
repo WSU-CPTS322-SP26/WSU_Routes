@@ -59,20 +59,19 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Map Sample App"),
-        leading:
-          IconButton(
+        
+     
+        actions: [
+               IconButton(
             icon: const Icon(Icons.person),
             onPressed: () async {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => PreferencesPage(),
-                ),
+                MaterialPageRoute(builder: (_) => PreferencesPage()),
               );
             },
           ),
   
-        actions: [
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
