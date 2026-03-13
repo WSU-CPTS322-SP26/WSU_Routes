@@ -9,6 +9,20 @@ app = Flask(__name__)
 app.debug = True
 CORS(app)
 
+#setup for email auth + password reset features 
+from flask_mail import Mail, Message
+import random
+from datetime import datetime, timedelta
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'your_gmail@gmail.com'
+app.config['MAIL_PASSWORD'] = 'your_app_password'  # Gmail App Password, not real password
+mail = Mail(app)
+
+#################
+
 database = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///my_database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # Disable tracking to save memory
@@ -24,6 +38,10 @@ class Profile(dataBase.Model): #inital profile class
     isClub = dataBase.Column(dataBase.Boolean)
     locationPermission = dataBase.Column(dataBase.Boolean)
     password = dataBase.Column(dataBase.String)
+
+    #new components added for email auth and password reset features 
+    otp = dataBase.Column(dataBase.String) #one time password 
+    is_verified = dataBase.Column(dataBase.Boolean, default=False) 
 
 class Pin(dataBase.Model): #inital pin class
     __tablename__ = 'pins'
@@ -159,6 +177,8 @@ def register():
     if existing_user:
         return jsonify({"error": "This user already exists"}), 400
     
+    otp = str(random.randint(100000, 999999)) #generate random 6 digit otp
+
     new_user = Profile(
         id=str(uuid.uuid4()),
         name=name,
@@ -166,12 +186,40 @@ def register():
         password=password,
         notifOn=True,
         isClub=False,
-        locationPermission=False
+        locationPermission=False,
+
+        otp = otp,
+        is_verified = False
     )
     dataBase.session.add(new_user)
     dataBase.session.commit()
 
-    return jsonify({"id": new_user.id}), 200
+    #send otp email
+    msg = Message("Your verification code", send="your_gmail@gmail.com", recipients=[email])
+    msg.body = f"Your verification code is: {otp}"
+    mail.send(msg)
+
+
+    return jsonify({"message": "OTP sent to email"}), 200
+
+@app.route("/verify", methods = ['POST'])
+def verify():
+    data = request.get_json()
+    email = data.get("email")
+    otp_input = data.get("otp")
+
+    user = Profile.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    if user.otp != otp_input:
+        return jsonify({"error": "incorrect otp"}), 400
+
+    user.is_verified = True
+    user.otp = None #clear otp after used
+    dataBase.session.commit()
+    return jsonify({"message": "Email verified"}), 200
+
+
 
 @app.route("/login", methods = ['POST'])
 def login():
@@ -183,6 +231,9 @@ def login():
     existing_user = Profile.query.filter_by(email=email).first()
 
     if existing_user and existing_user.password == password:
+        
+        if not existing_user.is_verified:
+            return jsonify({"message": "email not verified"}), 403
         return jsonify({
             "message": "Welcome back " + existing_user.name,
         }), 200
