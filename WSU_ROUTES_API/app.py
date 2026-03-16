@@ -18,7 +18,7 @@ dataBase = SQLAlchemy(app)
 class Profile(dataBase.Model): #inital profile class
     __tablename__ = 'profiles'
     id = dataBase.Column(dataBase.String, primary_key=True, unique=True, nullable=False) #different from event and pin id
-    name = dataBase.Column(dataBase.String)
+    name = dataBase.Column(dataBase.String, unique=True)
     email = dataBase.Column(dataBase.String)
     notifOn = dataBase.Column(dataBase.Boolean)
     isClub = dataBase.Column(dataBase.Boolean)
@@ -189,6 +189,34 @@ def login():
 
     return jsonify({"error": "Invalid email or password"}), 401
 
+@app.route("/events/public", methods = ['GET', 'POST'])
+def GetPubEvents():
+    events = Event.query.filter(Event.isPublic == True).order_by(Event.date).all()
+    response = {}
+    num = 0
+    if(request.method == 'GET' and events): #checks if is a get request and if events isn't empty
+        for event in events:#could break here, not correct syntax maybe
+            response.update({
+                "id" + str(num): event.id,
+                "name" + str(num): event.name,
+                "pinId" + str(num): event.pinId,
+                "date" + str(num): event.date,
+                "description" + str(num): event.description
+
+            })
+            num += 1
+        response.update({"count": num}) 
+        print(response) # to check
+        return jsonify(response)
+    elif(request.method == 'POST'):
+        data = request.get_json()
+        if data is None:
+            return "No data",214
+        else:
+            CreateEvent(data['name'], data['isPublic'], data['date'], data['description'])
+            return ('', 200)
+    else:
+        return ('', 204)
 
 if __name__ == "__main__":
 
