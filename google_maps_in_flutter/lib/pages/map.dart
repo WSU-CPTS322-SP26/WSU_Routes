@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_in_flutter/container_classes/pin.dart';
 import 'package:google_maps_in_flutter/pages/events_page.dart';
 import 'package:google_maps_in_flutter/pages/preferences_page.dart';
 import 'package:google_maps_in_flutter/pages/login_page.dart';
@@ -28,9 +29,109 @@ class _MapPageState extends State<MapPage>
     //print("Map Created");
   }
 
+  void getCamPos(BuildContext context)
+  {
+    mapController.getCamPosLat(context);
+  }
+
+  void UpdateUIState(int newVal)
+  {
+    setState(() {
+         uiState = newVal; // rebuild UI after controller updates value
+        });
+  }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
+  {
+      Widget content;
+      switch(uiState)
+      {
+        case 0: //Original State
+        content = Align(
+          alignment: Alignment.bottomCenter,
+          child:
+          FloatingActionButton
+          (
+            mini: true, 
+            onPressed: () => {UpdateUIState(1)},
+            backgroundColor: Colors.red,
+            child: Icon(Icons.add),
+          )
+        ,);
+        break;
+        case 1: //getting location
+        content = Stack(
+          children: [
+          Align(alignment: Alignment.center,
+          child: Icon(Icons.pin, color: Colors.red, size: 20,),//visual guide
+          
+          ),
+          Align(alignment: Alignment.bottomCenter,//buttons to go back or to select location
+          child: 
+          Column(children: [
+            FloatingActionButton // go back
+            (
+              mini: true, 
+              onPressed: () => {UpdateUIState(0)},
+              backgroundColor: Colors.red,
+              child: Icon(Icons.arrow_back),
+            ),
+            FloatingActionButton // confirm
+              (
+                mini: true, 
+                onPressed: () => {
+                  showDialog(
+                        context: context,
+                        builder: (context) 
+                        {
+                            TextEditingController nameController = TextEditingController();
+                            TextEditingController dateController = TextEditingController();
+                            TextEditingController descriptionController = TextEditingController();
+                            bool isPublicTemp = true;
+
+                            return StatefulBuilder(builder: (context, setStateDialog)
+                            {
+                              return AlertDialog(
+                              title: Text("Create Pin"),
+                              content: Column(
+                                children: [
+                                  Text("Name:"),
+                                  TextField(
+                                    controller: nameController,
+                                  ),
+                                  Text("Private | Public:"),
+                                  Switch(value: isPublicTemp, onChanged: (bool val) { setStateDialog(() {
+                                      isPublicTemp = val;
+                                    }); 
+                                  }),
+                                  Text("Description:"),
+                                  TextField(
+                                    controller: descriptionController,
+                                  ),
+
+                                  ElevatedButton(onPressed: () {
+                                    mapController.CreateNewPin(nameController.text, isPublicTemp, descriptionController.text, context);
+                                  }, child: Text("Submit")),
+                                ]
+                              )
+                            );
+                            });
+                        }
+                      )
+                },
+                backgroundColor: Colors.green,
+                child: Icon(Icons.check_box),
+              ),
+          ],)
+
+          )
+          ],
+        );
+        default: 
+        content = Center (child: Text("NOT WORKING"),);
+        break;
+      }
 
     return Scaffold(
       appBar: AppBar(
@@ -62,55 +163,20 @@ class _MapPageState extends State<MapPage>
           )
         ],
       ),
-      body: GoogleMap(
+      body: 
+      GoogleMap(
         onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(
           target: _center,
           zoom: 17.0,
         ),
-      ),   
+      ),
+      floatingActionButton: content,//our defined content
+      
     );
   } 
 }
 
-class OperatingButtons extends StatefulWidget
-{
-  const OperatingButtons({super.key});
-
-  @override
-  State<OperatingButtons> createState() => _OperatingButtonsState();
-
-}
-
-//Map interface is the homescreen -> displayed once signed in
-class _OperatingButtonsState extends State<OperatingButtons> 
-{
-  late MapController mapController;
-  int uiState = 0; 
-  // 0 is opening state with option to add pin,
-
-  @override
-  Widget build(BuildContext context) {
-
-      switch(uiState)
-      {
-        case 0:
-        Center(child:
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-          FloatingActionButton
-          (
-            mini: true, 
-            onPressed: controller.getCamPosLat,
-            backgroundColor: Colors.red,
-            child: Icon(Icons.add),
-          )
-        ,)
-        break;
-        default: 
-        break;
-      }
-  } 
-}
 
 
 

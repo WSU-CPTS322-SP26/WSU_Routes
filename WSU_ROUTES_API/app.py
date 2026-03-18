@@ -32,6 +32,7 @@ class Pin(dataBase.Model): #inital pin class
     isPublic = dataBase.Column(dataBase.Boolean)
     locationLat = dataBase.Column(dataBase.Float)
     locationLong = dataBase.Column(dataBase.Float)
+    description = dataBase.Column(dataBase.String)
 
 class Event(dataBase.Model):
     __tablename__ = 'events'
@@ -69,6 +70,10 @@ def CreateEvent(name, isPublic, date, description):
     else:
         print('ALREADY HAVE EVENT WITH ID')
     
+def CreatePin(name, isPublic, locationLat, locationLong, description):
+    newPin = Pin(id= name, name=name, isPublic=isPublic, locationLat=locationLat, locationLong=locationLong, description=description)
+    dataBase.session.add(newPin)
+    dataBase.session.commit()
 #Queries
 
 @app.route("/profile/<id>", methods = ['GET'])
@@ -214,6 +219,21 @@ def GetPubEvents():
             return "No data",214
         else:
             CreateEvent(data['name'], data['isPublic'], data['date'], data['description'])
+            return ('', 200)
+    else:
+        return ('', 204)
+
+@app.route("/pins/public", methods = ['GET', 'POST'])
+def Pins():
+    pins = Pin.query.filter(Pin.isPublic == True).all()
+    if(request.method == 'GET'): #will write get functionality later
+        return ('', 204)
+    elif(request.method == 'POST'):
+        data = request.get_json()
+        if data is None:
+            return "No data",214
+        else:
+            CreatePin(data['name'], data['isPublic'], data['locationLat'], data['locationLong'], data['description'])
             return ('', 200)
     else:
         return ('', 204)
