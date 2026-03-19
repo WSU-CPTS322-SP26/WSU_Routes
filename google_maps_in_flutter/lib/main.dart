@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_in_flutter/custom_icons_icons.dart';
 import 'package:google_maps_in_flutter/pages/events_page.dart';
 import 'package:google_maps_in_flutter/pages/preferences_page.dart';
 import 'package:google_maps_in_flutter/pages/login_page.dart';
 
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-//For accessing events page, need to add a button
-/*   runApp( 
+  //For accessing events page, need to add a button
+  /*   runApp( 
     MaterialApp(
       home: EventsPage(),
     )
@@ -22,17 +22,13 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return MaterialApp(
-    theme: ThemeData( 
-    useMaterial3: true,
-    colorSchemeSeed: Colors.green[700],
-    ),
-    home: LoginPage() //direct to login page on boot
+      theme: ThemeData(useMaterial3: true, colorSchemeSeed: Colors.green[700]),
+      home: LoginPage(), //direct to login page on boot
     );
   }
 }
-
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -45,24 +41,23 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late GoogleMapController mapController;
 
-  final LatLng _center =
-      const LatLng(46.731283215181065, -117.16155184037612);
+  final LatLng _center = const LatLng(46.731283215181065, -117.16155184037612);
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     //print("Map Created");
   }
 
+  int currentPageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("Map Sample App"),
-        
-     
+
         actions: [
-               IconButton(
+          IconButton(
             icon: const Icon(Icons.person),
             onPressed: () async {
               Navigator.push(
@@ -71,26 +66,68 @@ class _HomePageState extends State<HomePage> {
               );
             },
           ),
-  
+
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (_) => LoginPage()),
-                (route) => false, 
+                (route) => false,
               );
               //print("User logged out");
             },
-          )
+          ),
         ],
       ),
       body: GoogleMap(
         onMapCreated: _onMapCreated,
-        initialCameraPosition: CameraPosition(
-          target: _center,
-          zoom: 17.0,
-        ),
+        initialCameraPosition: CameraPosition(target: _center, zoom: 17.0),
+      ),
+      bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (int index) {
+          // setState(() {
+          //   currentPageIndex = index;
+          // });
+          if (index == 3)
+          {
+             Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => EventsPage()),
+            );
+          }
+          if (index == 4)
+          {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => PreferencesPage()),
+            );
+          }
+
+        },
+        destinations: [
+          NavigationDestination(
+            icon: Icon(CustomIcons.custom_person),
+            label: 'Profile',
+          ),
+          NavigationDestination(
+            icon: Icon(CustomIcons.custom_pin_sharing),
+            label: 'Pin_sharing',
+          ),
+          NavigationDestination(
+            icon: Icon(CustomIcons.custom_organization),
+            label: 'Organizations',
+          ),
+          NavigationDestination(
+            icon: Icon(CustomIcons.custom_calendar),
+            label: 'Events',
+          ),
+          NavigationDestination(
+            icon: Icon(CustomIcons.custom_gear),
+            label: 'Preferences',
+          ),
+        ],
+        selectedIndex: currentPageIndex,
       ),
     );
   }

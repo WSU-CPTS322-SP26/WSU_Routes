@@ -56,5 +56,4 @@ WSU_ROUTES_API/instance/*.db
 *.db
 #hunters test projects (dont commit to main)
 hunter_test/
-.idea/
 .vscode/
