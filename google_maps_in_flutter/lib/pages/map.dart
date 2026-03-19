@@ -1,12 +1,12 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_in_flutter/container_classes/pin.dart';
-import 'package:google_maps_in_flutter/pages/events_page.dart';
 import 'package:google_maps_in_flutter/pages/preferences_page.dart';
 import 'package:google_maps_in_flutter/pages/login_page.dart';
 import '../controllers/map_controller.dart';
+import '../container_classes/pin.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -18,20 +18,30 @@ class MapPage extends StatefulWidget {
 //Map interface is the homescreen -> displayed once signed in
 class _MapPageState extends State<MapPage> 
 {
-  late MapController mapController;
+  late MapController mapController = new MapController();
   int uiState = 0;
+  Set<Marker> markers = {};
 
   final LatLng _center =
       const LatLng(46.731283215181065, -117.16155184037612);
 
   void _onMapCreated(GoogleMapController controller) {
     mapController.googController = controller;
+    loadPins();
     //print("Map Created");
   }
 
   void getCamPos(BuildContext context)
   {
     mapController.getCamPosLat(context);
+  }
+
+  Future<void> loadPins() async
+  {
+    await mapController.getPins(markers);//populates list
+    setState(() {
+      markers;
+    });
   }
 
   void UpdateUIState(int newVal)
@@ -51,13 +61,24 @@ class _MapPageState extends State<MapPage>
         content = Align(
           alignment: Alignment.bottomCenter,
           child:
-          FloatingActionButton
-          (
-            mini: true, 
-            onPressed: () => {UpdateUIState(1)},
-            backgroundColor: Colors.red,
-            child: Icon(Icons.add),
-          )
+          Row(children: [
+            FloatingActionButton
+            (
+              mini: false, 
+              onPressed: () => {UpdateUIState(1)},
+              backgroundColor: Colors.red,
+              child: Icon(Icons.add),
+            ),
+            FloatingActionButton
+            (
+              mini: false, 
+              onPressed: () => {loadPins()},
+              backgroundColor: Colors.white,
+              child: Icon(Icons.loop),
+            ),
+
+          ],)
+
         ,);
         break;
         case 1: //getting location
@@ -69,24 +90,23 @@ class _MapPageState extends State<MapPage>
           ),
           Align(alignment: Alignment.bottomCenter,//buttons to go back or to select location
           child: 
-          Column(children: [
+          Row(children: [
             FloatingActionButton // go back
             (
-              mini: true, 
+              mini: false, 
               onPressed: () => {UpdateUIState(0)},
               backgroundColor: Colors.red,
               child: Icon(Icons.arrow_back),
             ),
             FloatingActionButton // confirm
               (
-                mini: true, 
+                mini: false, 
                 onPressed: () => {
-                  showDialog(
+                  showDialog(//popup to put in pin details.
                         context: context,
                         builder: (context) 
                         {
                             TextEditingController nameController = TextEditingController();
-                            TextEditingController dateController = TextEditingController();
                             TextEditingController descriptionController = TextEditingController();
                             bool isPublicTemp = true;
 
@@ -112,6 +132,9 @@ class _MapPageState extends State<MapPage>
 
                                   ElevatedButton(onPressed: () {
                                     mapController.CreateNewPin(nameController.text, isPublicTemp, descriptionController.text, context);
+                                    UpdateUIState(0);
+                                    Navigator.pop(context);
+                                    loadPins();
                                   }, child: Text("Submit")),
                                 ]
                               )
@@ -164,15 +187,17 @@ class _MapPageState extends State<MapPage>
         ],
       ),
       body: 
-      GoogleMap(
-        onMapCreated: _onMapCreated,
-        initialCameraPosition: CameraPosition(
-          target: _center,
-          zoom: 17.0,
-        ),
-      ),
+              GoogleMap(
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: _center,
+                zoom: 17.0,
+              ),
+              markers: markers,
+            ),
       floatingActionButton: content,//our defined content
       
+
     );
   } 
 }

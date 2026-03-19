@@ -226,8 +226,21 @@ def GetPubEvents():
 @app.route("/pins/public", methods = ['GET', 'POST'])
 def Pins():
     pins = Pin.query.filter(Pin.isPublic == True).all()
-    if(request.method == 'GET'): #will write get functionality later
-        return ('', 204)
+    response = {}
+    num = 0
+    if(request.method == 'GET'): 
+        for pin in pins:
+            response.update({
+                "id" + str(num): pin.id,
+                "name" + str(num): pin.name,
+                "locationLat" + str(num): pin.locationLat,
+                "locationLong" + str(num): pin.locationLong, 
+                "description" + str(num): pin.description
+            })
+            num += 1
+        response.update({"count": num}) 
+        print(response) # to check
+        return jsonify(response)
     elif(request.method == 'POST'):
         data = request.get_json()
         if data is None:
@@ -240,9 +253,9 @@ def Pins():
 
 if __name__ == "__main__":
 
-    print("REGISTERED ROUTES:") #print for debugging
-    for rule in app.url_map.iter_rules():
-        print(rule)
+    #print("REGISTERED ROUTES:") #print for debugging #can be uncommented anytime
+    #for rule in app.url_map.iter_rules():
+        #print(rule)
 
     
     app.run(host="0.0.0.0", port=5000)#very important on where you host on machine, this is localhost port 5000
