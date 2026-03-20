@@ -62,6 +62,7 @@ class _MapPageState extends State<MapPage>
           alignment: Alignment.bottomCenter,
           child:
           Row(children: [
+            Padding(padding: EdgeInsets.only(right: 165)),
             FloatingActionButton
             (
               mini: false, 
@@ -85,12 +86,18 @@ class _MapPageState extends State<MapPage>
         content = Stack(
           children: [
           Align(alignment: Alignment.center,
-          child: Icon(Icons.pin, color: Colors.red, size: 20,),//visual guide
+          child: Column(
+              children: [
+                Padding(padding: EdgeInsets.only(top: 530.0)),
+                Icon(Icons.push_pin, color: Colors.red, size: 50,)
+              ]
+            ),//visual guide
           
           ),
           Align(alignment: Alignment.bottomCenter,//buttons to go back or to select location
           child: 
           Row(children: [
+            Padding(padding: EdgeInsets.only(right: 165)),
             FloatingActionButton // go back
             (
               mini: false, 
