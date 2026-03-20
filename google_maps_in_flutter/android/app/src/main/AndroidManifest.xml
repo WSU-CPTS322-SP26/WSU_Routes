@@ -38,6 +38,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
+        <meta-data android:name="flutterEmbedding" android:value="2" />
     </application>
 
     <queries>
@@ -46,5 +47,8 @@
             <data android:mimeType="text/plain"/>
         </intent>
     </queries>
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
 </manifest>
