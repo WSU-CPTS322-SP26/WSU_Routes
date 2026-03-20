@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
     useMaterial3: true,
     colorSchemeSeed: Colors.green[700],
     ),
-    home: MapPage() //direct to login page on boot
+    home: LoginPage() //direct to login page on boot
     );
   }
 }
