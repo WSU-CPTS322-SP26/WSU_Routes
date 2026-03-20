@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import'package:http/http.dart' as http;
 import 'package:google_maps_in_flutter/main.dart';
-
-
+import '../pages/map.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -50,7 +49,7 @@ class _LoginPageState extends State<LoginPage>{
         
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const HomePage()),
+          MaterialPageRoute(builder: (_) => const MapPage()),
         );
       } else {
         print("Server error, rejected request: ${response.body}");
