@@ -17,11 +17,11 @@ from datetime import datetime, timedelta
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'your_gmail@gmail.com'
-app.config['MAIL_PASSWORD'] = 'your_app_password'  # Gmail App Password, not real password
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME', 'your_gmail@gmail.com')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD', 'your_app_password')
+app.config['MAIL_DEFAULT_SENDER'] = app.config['MAIL_USERNAME']
 mail = Mail(app)
 
-#################
 
 database = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///my_database.db'
@@ -67,11 +67,9 @@ class Comment(dataBase.Model):
     userId = dataBase.Column(dataBase.String)
 
 with app.app_context():
-    dataBase.drop_all() #can comment this out so the database isn't reset everytime, also database isn't in cloud rn, only on your system.
+    #dataBase.drop_all() #can comment this out so the database isn't reset everytime
     dataBase.create_all()
 
-
-#code run
 
 #write this
 def GenerateID():#will update
@@ -86,6 +84,24 @@ def CreateEvent(name, isPublic, date, description):
         dataBase.session.commit()
     else:
         print('ALREADY HAVE EVENT WITH ID')
+
+
+def generate_otp():
+    return str(random.randint(100000, 999999))
+
+
+def send_verification_email(email, otp):
+    msg = Message("Your verification code", recipients=[email])
+    msg.body = f"Your verification code is: {otp}"
+    mail.send(msg)
+
+
+def is_mail_configured():
+    username = app.config.get('MAIL_USERNAME')
+    password = app.config.get('MAIL_PASSWORD')
+    placeholder_user = username == 'your_gmail@gmail.com'
+    placeholder_pass = password == 'your_app_password'
+    return bool(username and password) and not (placeholder_user or placeholder_pass)
     
 #Queries
 
@@ -173,11 +189,19 @@ def register():
     password = data.get("password")
     name = data.get("name")
 
+    if not email or not password:
+        return jsonify({"error": "Email and password are required"}), 400
+
     existing_user = Profile.query.filter_by(email=email).first()
     if existing_user:
         return jsonify({"error": "This user already exists"}), 400
+
+    if not is_mail_configured():
+        return jsonify({
+            "error": "Email server is not configured. Set MAIL_USERNAME and MAIL_PASSWORD in your environment."
+        }), 500
     
-    otp = str(random.randint(100000, 999999)) #generate random 6 digit otp
+    otp = generate_otp() #generate random 6 digit otp
 
     new_user = Profile(
         id=str(uuid.uuid4()),
@@ -195,9 +219,16 @@ def register():
     dataBase.session.commit()
 
     #send otp email
-    msg = Message("Your verification code", send="your_gmail@gmail.com", recipients=[email])
-    msg.body = f"Your verification code is: {otp}"
-    mail.send(msg)
+    try:
+        send_verification_email(email, otp)
+    except Exception as e:
+        # Avoid creating unusable accounts if OTP delivery fails.
+        dataBase.session.delete(new_user)
+        dataBase.session.commit()
+        app.logger.exception("Failed to send OTP email during /register")
+        if app.debug:
+            return jsonify({"error": f"Failed to send OTP email: {str(e)}"}), 500
+        return jsonify({"error": "Failed to send OTP email"}), 500
 
 
     return jsonify({"message": "OTP sent to email"}), 200
@@ -211,6 +242,8 @@ def verify():
     user = Profile.query.filter_by(email=email).first()
     if not user:
         return jsonify({"error": "User not found"}), 404
+    if user.is_verified:
+        return jsonify({"message": "Email already verified"}), 200
     if user.otp != otp_input:
         return jsonify({"error": "incorrect otp"}), 400
 
@@ -218,6 +251,39 @@ def verify():
     user.otp = None #clear otp after used
     dataBase.session.commit()
     return jsonify({"message": "Email verified"}), 200
+
+
+@app.route("/resend-otp", methods=['POST'])
+def resend_otp():
+    data = request.get_json()
+    email = data.get("email")
+
+    if not email:
+        return jsonify({"error": "Email is required"}), 400
+
+    user = Profile.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+    if user.is_verified:
+        return jsonify({"message": "Email already verified"}), 200
+
+    if not is_mail_configured():
+        return jsonify({
+            "error": "Email server is not configured. Set MAIL_USERNAME and MAIL_PASSWORD in your environment."
+        }), 500
+
+    user.otp = generate_otp()
+    dataBase.session.commit()
+
+    try:
+        send_verification_email(email, user.otp)
+    except Exception as e:
+        app.logger.exception("Failed to resend OTP email during /resend-otp")
+        if app.debug:
+            return jsonify({"error": f"Failed to resend OTP email: {str(e)}"}), 500
+        return jsonify({"error": "Failed to resend OTP email"}), 500
+
+    return jsonify({"message": "A new OTP code was sent"}), 200
 
 
 
@@ -248,4 +314,4 @@ if __name__ == "__main__":
         print(rule)
 
     
-    app.run(host="0.0.0.0", port=5000)#very important on where you host on machine, this is localhost port 5000
+    app.run(host="0.0.0.0", port=5000)#localhost port 5000
