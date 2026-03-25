@@ -1,5 +1,6 @@
 name: Flutter CI
 # sets up the runner
+run-name: WSU_Routes testing workflow.
 on:
   push:
     branches: [ "main", "actions_test" ]
@@ -24,10 +25,10 @@ jobs:
       - name: install dependencies 
         working-directory: WSU_ROUTES_API
         run: pip install -r requirements.txt
-
-      - name: run python backend server
-        working-directory: WSU_ROUTES_API
-        run: python app.py
+      # starts a server but never exits CI isnt the right place to run a live server
+      # - name: run python backend server
+      #   working-directory: WSU_ROUTES_API
+      #   run: python app.py
 
       - name: Install flutter dependencies
         working-directory: google_maps_in_flutter
