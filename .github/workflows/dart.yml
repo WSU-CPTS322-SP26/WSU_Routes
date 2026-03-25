@@ -1,5 +1,5 @@
 name: Flutter CI
-# claude code helped generate this file.
+# sets up the runner
 on:
   push:
     branches: [ "main" ]
@@ -17,11 +17,21 @@ jobs:
         with:
           channel: stable
 
-      - name: Install dependencies
+      - name: setup backend server
+        working-directory: WSU_ROUTES_API
+        run: python -m venv venv
+      
+      - name: install dependencies 
+        working-directory: WSU_ROUTES_API
+        run: pip install -r requirements.txt
+
+      - name: run python backend server
+        working-directory: WSU_ROUTES_API
+        run: python app.py
+
+      - name: Install flutter dependencies
         working-directory: google_maps_in_flutter
         run: flutter pub get
-
-
 
       - name: Verify formatting
         working-directory: google_maps_in_flutter
