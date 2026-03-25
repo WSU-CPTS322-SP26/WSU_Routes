@@ -66,8 +66,8 @@ class Comment(dataBase.Model):
     text = dataBase.Column(dataBase.String)
     userId = dataBase.Column(dataBase.String)
 
-with app.app_context():
-    #dataBase.drop_all() #can comment this out so the database isn't reset everytime
+with app.app_context(): #determines if db resets
+    dataBase.drop_all()
     dataBase.create_all()
 
 
@@ -86,17 +86,17 @@ def CreateEvent(name, isPublic, date, description):
         print('ALREADY HAVE EVENT WITH ID')
 
 
-def generate_otp():
+def generate_otp(): #generate random 6 dig code
     return str(random.randint(100000, 999999))
 
 
-def send_verification_email(email, otp):
+def send_verification_email(email, otp): #send email with verif code for email verif or password reset
     msg = Message("Your verification code", recipients=[email])
     msg.body = f"Your verification code is: {otp}"
     mail.send(msg)
 
 
-def is_mail_configured():
+def is_mail_configured(): #setup outgoing email for codes
     username = app.config.get('MAIL_USERNAME')
     password = app.config.get('MAIL_PASSWORD')
     placeholder_user = username == 'your_gmail@gmail.com'
@@ -213,7 +213,7 @@ def register():
         locationPermission=False,
 
         otp = otp,
-        is_verified = False
+        is_verified = False #initially unverified  
     )
     dataBase.session.add(new_user)
     dataBase.session.commit()
@@ -222,7 +222,7 @@ def register():
     try:
         send_verification_email(email, otp)
     except Exception as e:
-        # Avoid creating unusable accounts if OTP delivery fails.
+        # avoid creating accounts if OTP delivery fails.
         dataBase.session.delete(new_user)
         dataBase.session.commit()
         app.logger.exception("Failed to send OTP email during /register")
@@ -269,7 +269,7 @@ def resend_otp():
 
     if not is_mail_configured():
         return jsonify({
-            "error": "Email server is not configured. Set MAIL_USERNAME and MAIL_PASSWORD in your environment."
+            "error": "Email server is not configured. Set MAIL_USERNAME and MAIL_PASSWORD before starting backend server."
         }), 500
 
     user.otp = generate_otp()
@@ -285,6 +285,62 @@ def resend_otp():
 
     return jsonify({"message": "A new OTP code was sent"}), 200
 
+@app.route("/reset-password", methods=['POST'])
+def reset_password():
+    data = request.get_json()
+    email = data.get("email")
+
+    if not email:
+        return jsonify({"error": "Email is required"}), 400
+
+    user = Profile.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    if not is_mail_configured():
+        return jsonify({
+            "error": "Email server is not configured. Set MAIL_USERNAME and MAIL_PASSWORD before starting backend server."
+        }), 500
+
+    #if user is valid, generate otp code
+    new_otp = generate_otp()
+    user.otp = new_otp
+    dataBase.session.commit()
+
+    try:
+        send_verification_email(email, new_otp)
+    except Exception as e:
+        app.logger.exception("Failed to send reset password OTP email")
+        if app.debug:
+            return jsonify({"error": f"Failed to send reset password OTP email: {str(e)}"}), 500
+        return jsonify({"error": "Failed to send reset password OTP email"}), 500
+
+    return jsonify({"message": "A new OTP code was sent for password reset"}), 200
+
+
+@app.route("/reset-password/confirm", methods=['POST'])
+def confirm_password_reset():
+    data = request.get_json()
+    email = data.get("email")
+    otp_input = data.get("otp")
+    new_password = data.get("newPassword")
+
+    if not email or not otp_input or not new_password:
+        return jsonify({"error": "Email, otp, and newPassword are required"}), 400
+
+    user = Profile.query.filter_by(email=email).first()
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    if user.otp != otp_input:
+        return jsonify({"error": "incorrect otp"}), 400
+
+    user.password = new_password #set new password if otp correct
+    user.otp = None #clear otp after use 
+    dataBase.session.commit() 
+
+    return jsonify({"message": "Password reset successful"}), 200
+
 
 
 @app.route("/login", methods = ['POST'])
@@ -296,10 +352,10 @@ def login():
 
     existing_user = Profile.query.filter_by(email=email).first()
 
-    if existing_user and existing_user.password == password:
+    if existing_user and existing_user.password == password: #might add hashing for security
         
         if not existing_user.is_verified:
-            return jsonify({"message": "email not verified"}), 403
+            return jsonify({"message": "Your email not verified"}), 403
         return jsonify({
             "message": "Welcome back " + existing_user.name,
         }), 200

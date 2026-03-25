@@ -1,10 +1,9 @@
-///working to differentiate login and register page
-
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:google_maps_in_flutter/pages/login_page.dart';
-import 'package:google_maps_in_flutter/pages/otp_verification_page.dart';
+import 'package:google_maps_in_flutter/pages/verification_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -16,6 +15,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
   bool _isLoading = false;
   String? _errorMessage;
 
@@ -34,24 +34,22 @@ class _RegisterPageState extends State<RegisterPage> {
     });
 
     final url = Uri.parse(
-      //http request
       "http://10.0.2.2:5000/register",
     );
 
     try {
-      final response = await http.post(
-        //may differentiate login and register methods
+      final response = await http.post( //create request with desired profile email, name and password
         url,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({"email": email, "password": password, "name": email}),
-      );
+      ).timeout(const Duration(seconds: 15)); //safeguard if backend is disfunctional
 
       if (response.statusCode == 200) {
-        //if register successful
-        if (!mounted) return;
+        //if register successful, route to verification page
+        if (!mounted) return; //safeguard, similar to dispose call
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => OtpVerificationPage(email: email)),
+          MaterialPageRoute(builder: (_) => OtpVerificationPage(email: email)), 
         );
       } else {
         final body = jsonDecode(response.body);
@@ -60,9 +58,13 @@ class _RegisterPageState extends State<RegisterPage> {
               body['error'] ?? body['message'] ?? "Registration failed.";
         });
       }
+    } on TimeoutException {
+      setState(() {
+        _errorMessage = "Request timed out. Try again later.";
+      });
     } catch (_) {
       setState(() {
-        _errorMessage = "Unable to reach server. Please try again.";
+        _errorMessage = "Unable to reach server. Try again.";
       });
     } finally {
       if (!mounted) return;
@@ -71,7 +73,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   @override
-  void dispose() {
+  void dispose() { //clear email and password in controller after leaving page
     emailController.dispose();
     passwordController.dispose();
     super.dispose();

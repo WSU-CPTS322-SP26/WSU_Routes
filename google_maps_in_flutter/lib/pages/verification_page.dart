@@ -6,7 +6,7 @@ import 'package:google_maps_in_flutter/pages/login_page.dart';
 import 'package:http/http.dart' as http;
 
 class OtpVerificationPage extends StatefulWidget {
-  const OtpVerificationPage({super.key, required this.email});
+  const OtpVerificationPage({super.key, required this.email}); //pass in email for display
 
   final String email;
 
@@ -16,6 +16,7 @@ class OtpVerificationPage extends StatefulWidget {
 
 class _OtpVerificationPageState extends State<OtpVerificationPage> {
   final otpController = TextEditingController();
+
   bool _isLoading = false;
   String? _errorMessage;
 
@@ -23,7 +24,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     final otp = otpController.text.trim();
     if (otp.isEmpty) {
       setState(
-        () => _errorMessage = 'Please enter the OTP code sent to your email.',
+        () => _errorMessage = 'Please enter the passcode sent to your email.',
       );
       return;
     }
@@ -33,19 +34,19 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       _errorMessage = null;
     });
 
-    final url = Uri.parse('http://10.0.2.2:5000/verify');
+    final url = Uri.parse('http://10.0.2.2:5000/verify'); //set http destination
 
     try {
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'email': widget.email, 'otp': otp}),
+        body: jsonEncode({'email': widget.email, 'otp': otp}), //send password and email to be verified by backend
       );
 
       final body = jsonDecode(response.body);
       if (!mounted) return;
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200) { //if verified, move to home/map page
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Email verified successfully.')),
         );
@@ -63,14 +64,14 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     } catch (_) {
       if (!mounted) return;
       setState(() {
-        _errorMessage = 'Unable to reach server. Please try again.';
+        _errorMessage = 'Unable to reach server. Try again.';
       });
     } finally {
       if (!mounted) return;
       setState(() => _isLoading = false);
     }
   }
-
+  //resend code if first try failed
   Future<void> _resendOtp() async {
     final url = Uri.parse('http://10.0.2.2:5000/resend-otp');
 
@@ -116,7 +117,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Enter the 6-digit code sent to ${widget.email}.',
+              'Enter the code sent to ${widget.email}.',
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 16),
@@ -124,7 +125,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               controller: otpController,
               keyboardType: TextInputType.number,
               maxLength: 6,
-              decoration: const InputDecoration(labelText: 'OTP Code'),
+              decoration: const InputDecoration(labelText: 'Verification Code'),
             ),
             if (_errorMessage != null) ...[
               const SizedBox(height: 8),
@@ -141,10 +142,10 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                     )
                   : const Text('Verify Email'),
             ),
-            TextButton(onPressed: _resendOtp, child: const Text('Resend Code')),
+            TextButton(onPressed: _resendOtp, child: const Text('Resend Code')), //allow option to resend code
             TextButton(
               onPressed: () {
-                Navigator.pushAndRemoveUntil(
+                Navigator.pushAndRemoveUntil( //option to switch to login page instead
                   context,
                   MaterialPageRoute(builder: (_) => const LoginPage()),
                   (route) => false,

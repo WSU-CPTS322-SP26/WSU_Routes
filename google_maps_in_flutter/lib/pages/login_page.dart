@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_in_flutter/pages/register_page.dart';
-import 'package:google_maps_in_flutter/pages/otp_verification_page.dart';
+import 'package:google_maps_in_flutter/pages/verification_page.dart';
+import 'package:google_maps_in_flutter/pages/password_reset_page.dart';
 import 'dart:convert';
+import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:google_maps_in_flutter/main.dart';
 
-//currently working to separate login and register page (to implement email auth, password reset, etc.)
-//implement snack bar widget (for smaller/temporary messages to user)
-
-//finished front end of improved login, need to work on flask integration for password reset
+//program boots to login page on startup, user can log in to route to map or go to register page
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -26,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> submit() async {
     setState(() {
-      //default state, waiting for input, no current errors
+      //default state, wait for input no current errors
       _isLoading = true;
       _errorMessage = null;
     });
@@ -42,93 +41,60 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    final url = Uri.parse(
-      //http request
+    final url = Uri.parse( //destination for http request
       "http://10.0.2.2:5000/login",
     );
 
     try {
-      final response = await http.post(
-        //may differentiate login and register methods
+      final response = await http.post( //send profile fields to backend method
         url,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({"email": email, "password": password, "name": email}),
-      );
+      ).timeout(const Duration(seconds: 15));
 
-      print("STATUS CODE: ${response.statusCode}");
+      print("STATUS CODE: ${response.statusCode}"); //denotes whether request worked (i.e user exists)
       print("BODY: ${response.body}");
 
-      if (response.statusCode == 200) {
-        //if login/register successful
-
+      if (response.statusCode == 200) {//success
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const HomePage()),
+          MaterialPageRoute(builder: (_) => const HomePage()), //route to homepage/map screen if successful
         );
       } else if (response.statusCode == 403) {
         if (!mounted) return;
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => OtpVerificationPage(email: email)),
+          MaterialPageRoute(builder: (_) => OtpVerificationPage(email: email)), //route to verif page
         );
       } else {
-        //want to add specific message if email exists but password is wrong vs email dne
+        //may add specific message to differentiate if email exists but password is wrong vs email dne
         final body = jsonDecode(response.body);
         setState(() {
           _errorMessage =
               body['error'] ??
               body['message'] ??
-              "Login failed. Please check your credentials.";
+              "Login failed. Either your password is incorrect or you need to create an account";
         });
       }
+    //other fail cases
+    } on TimeoutException {
+      setState(() {
+        _errorMessage = "Request timed out. Please try again.";
+      });
     } catch (e) {
       setState(() {
-        _errorMessage = "Other error";
+        _errorMessage = "Unable to reach server. Please try again.";
       });
     } finally {
-      //mark end of loading regardless of outcome
-      setState(() => _isLoading = false);
+      setState(() => _isLoading = false); //spinner stops if failed
     }
   }
 
   @override
-  void dispose() {
+  void dispose() { //clear memory of email and password objects after exit
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
-  }
-
-  Future<void> _sendPasswordReset() async {
-    //process for resetting password
-    final email = emailController.text.trim();
-
-    if (email.isEmpty) {
-      setState(() => _errorMessage = "Enter your email to reset your password");
-      return;
-    }
-    //need to add verification to this state, http method dne yet
-    final url = Uri.parse(
-      "http://10.0.2.2:5000/reset-password",
-    ); //add logic to allow password reset (user can reset password for given email?)
-    //need Flask server integration, backend should recieve email, generate reset token, and send email to user with coresponding token
-    try {
-      final response = await http.post(
-        //begin process to send reset link
-        url,
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"email": email}),
-      );
-      final body = jsonDecode(response.body);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(body['message'] ?? "Attempting to send reset link"),
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Error occurred")));
-    }
   }
 
   @override
@@ -179,7 +145,16 @@ class _LoginPageState extends State<LoginPage> {
               //button for password reset
               alignment: Alignment.centerRight,
               child: TextButton(
-                onPressed: _sendPasswordReset,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => PasswordResetPage(
+                        initialEmail: emailController.text.trim(),
+                      ),
+                    ),
+                  );
+                },
                 child: const Text("Forgot password?"),
               ),
             ),
