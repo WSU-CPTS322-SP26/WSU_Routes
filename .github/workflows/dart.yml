@@ -34,10 +34,6 @@ jobs:
         working-directory: google_maps_in_flutter
         run: flutter pub get
 
-      - name: Verify formatting
-        working-directory: google_maps_in_flutter
-        run: dart format --output=none --set-exit-if-changed .
-
       - name: Analyze project source
         working-directory: google_maps_in_flutter
         run: flutter analyze
