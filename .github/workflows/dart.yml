@@ -2,7 +2,7 @@ name: Flutter CI
 # sets up the runner
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "actions_test" ]
   pull_request:
     branches: [ "main" ]
 
