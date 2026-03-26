@@ -6,8 +6,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:google_maps_in_flutter/main.dart';
-
-//program boots to login page on startup, user can log in to route to map or go to register page
+import '../pages/map.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -58,13 +57,7 @@ class _LoginPageState extends State<LoginPage> {
       if (response.statusCode == 200) {//success
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const HomePage()), //route to homepage/map screen if successful
-        );
-      } else if (response.statusCode == 403) {
-        if (!mounted) return;
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => OtpVerificationPage(email: email)), //route to verif page
+          MaterialPageRoute(builder: (_) => const MapPage()),
         );
       } else {
         //may add specific message to differentiate if email exists but password is wrong vs email dne

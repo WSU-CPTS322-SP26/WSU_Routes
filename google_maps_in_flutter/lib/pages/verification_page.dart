@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_in_flutter/main.dart';
 import 'package:google_maps_in_flutter/pages/login_page.dart';
+import 'package:google_maps_in_flutter/pages/map.dart';
 import 'package:http/http.dart' as http;
 
 class OtpVerificationPage extends StatefulWidget {
@@ -52,7 +53,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
         );
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (_) => const HomePage()),
+          MaterialPageRoute(builder: (_) =>  const MapPage()),
           (route) => false,
         );
       } else {
