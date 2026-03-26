@@ -45,15 +45,21 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       );
 
       final body = jsonDecode(response.body);
+      print("RESPONSE: $body"); // helps w/debugging
+
       if (!mounted) return;
 
       if (response.statusCode == 200) { //if verified, move to home/map page
+
+        final String userId = body['id']?.toString() ?? '';
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Email verified successfully.')),
         );
+
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (_) =>  const MapPage()),
+          MaterialPageRoute(builder: (_) => MapPage(userId: userId)),
           (route) => false,
         );
       } else {
@@ -62,7 +68,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               body['error'] ?? body['message'] ?? 'Verification failed.';
         });
       }
-    } catch (_) {
+    } catch (e) {
+      print("VERIFY ERROR: $e");
       if (!mounted) return;
       setState(() {
         _errorMessage = 'Unable to reach server. Try again.';

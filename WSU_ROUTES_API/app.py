@@ -255,7 +255,9 @@ def verify():
     user.is_verified = True
     user.otp = None #clear otp after used
     dataBase.session.commit()
-    return jsonify({"message": "Email verified"}), 200
+    return jsonify({"message": "Email verified",
+    "id": user.id 
+    }), 200
 
 
 @app.route("/resend-otp", methods=['POST'])
@@ -363,6 +365,7 @@ def login():
             return jsonify({"message": "Your email not verified"}), 403
         return jsonify({
             "message": "Welcome back " + existing_user.name,
+            "id": existing_user.id #to be used in front end requests
         }), 200
 
     return jsonify({"error": "Invalid email or password"}), 401

@@ -55,9 +55,12 @@ class _LoginPageState extends State<LoginPage> {
       print("BODY: ${response.body}");
 
       if (response.statusCode == 200) {//success
+        final body = jsonDecode(response.body); //retrieve user id (allows preference changes)
+        final String userId = body['id'];
+
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const MapPage()),
+          MaterialPageRoute(builder: (_) => MapPage(userId: userId)),
         );
       } else {
         //may add specific message to differentiate if email exists but password is wrong vs email dne

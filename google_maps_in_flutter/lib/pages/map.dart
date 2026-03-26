@@ -11,7 +11,8 @@ import '../controllers/map_controller.dart';
 import '../container_classes/pin.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({super.key});
+  final String userId;
+  const MapPage({super.key, required this.userId});
 
   @override
   State<MapPage> createState() => _MapPageState();
@@ -205,7 +206,7 @@ class _MapPageState extends State<MapPage> {
           if (index == 4) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => PreferencesPage()),
+              MaterialPageRoute(builder: (_) => PreferencesPage(userId: widget.userId)),
             );
           }
         },

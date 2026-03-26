@@ -1,30 +1,55 @@
 import 'package:flutter/material.dart';
 import '../controllers/preferences_controller.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class PreferencesPage extends StatefulWidget {
+  final String userId;
+  const PreferencesPage({required this.userId}); //need to take in id as parameter to properly mod db
+
   @override
   State<PreferencesPage> createState() => PrefState();
 }
 
 class PrefState extends State<PreferencesPage> {
-  final PreferencesController controller = PreferencesController();
+
+  bool isNotif = true; //on by default
+  bool isClub = false;
+  bool locationPerm = false;
+
+  //http request destinations
+  final String baseUrl = 'http://10.0.2.2:5000';
+  //final PreferencesController controller = PreferencesController();
+
 
   void onNotifChange(bool newVal) async {
-    await controller.UpdateNotif(newVal);
-
-    update();
+    setState(() => isNotif = newVal);
+    await http.put(
+      Uri.parse('$baseUrl/profile/${widget.userId}/notifOn'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'notifOn': newVal}),
+    );
+    //update();
   }
 
   void onClubChange(bool newVal) async {
-    await controller.UpdateClub(newVal);
-
-    update();
+    //await controller.UpdateClub(newVal);
+    setState(() => isClub = newVal);
+      await http.put(
+      Uri.parse('$baseUrl/profile/${widget.userId}/isClub'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'isClub': newVal}),
+    );
   }
 
   void onLocationPerfChange(bool newVal) async {
-    await controller.UpdateLocationPermissions(newVal);
 
-    update();
+      setState(() => locationPerm = newVal);
+      await http.put(
+      Uri.parse('$baseUrl/profile/${widget.userId}/locationPermission'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'locationPermission': newVal}),
+    );
   }
 
   void update() {
@@ -54,7 +79,7 @@ class PrefState extends State<PreferencesPage> {
                 Text("Notifications:", style: const TextStyle(fontSize: 24)),
                 const SizedBox(height: 20),
                 Switch(
-                  value: controller.isNotif,
+                  value: isNotif,
                   onChanged: onNotifChange,
                 ), //switch for notif
               ],
@@ -65,7 +90,7 @@ class PrefState extends State<PreferencesPage> {
                 Text("Club Profile:", style: const TextStyle(fontSize: 24)),
                 const SizedBox(height: 20),
                 Switch(
-                  value: controller.isClub,
+                  value: isClub,
                   onChanged: onClubChange,
                 ), //switch for club
               ],
@@ -79,8 +104,11 @@ class PrefState extends State<PreferencesPage> {
                 ),
                 const SizedBox(height: 20),
                 Switch(
-                  value: controller.locationPermission,
+                  value: locationPerm,
                   onChanged: onLocationPerfChange,
+
+
+
                 ), //switch for club
               ],
             ),
