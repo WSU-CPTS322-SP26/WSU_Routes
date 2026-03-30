@@ -4,11 +4,40 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../container_classes/pin.dart';
 import '../api_helper/maps_helper.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MapController 
 {
   late GoogleMapController googController;
   MapsHelper helper = MapsHelper();
+  Set<Marker> buildingMarkers = Set<Marker>();
+
+
+  MapController()
+  {
+    //CUB
+    buildingMarkers.add(Marker(
+        markerId: MarkerId("Compton Union Building"),
+        position: LatLng(46.73102477481042, -117.16225563581636),
+        infoWindow: InfoWindow(
+          title: "Compton Union Building",
+          snippet: "Also known as the CUB, connected to Terrell Library, and major social center on campus. Tap for full map.",
+          
+        ),
+        onTap: () 
+        {
+          _launchUrl(Uri.parse('https://cub.wsu.edu/about-the-cub/directory/')); // The URL to launch
+        },
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+        ));
+  }
+
+  Future<void> _launchUrl(Uri url) async //Taken from url launcher package documentation
+  {
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
+  }
 
   Future<LatLng> getCamPosLat(BuildContext context) async
   {

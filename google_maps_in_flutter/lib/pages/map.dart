@@ -7,6 +7,7 @@ import 'package:google_maps_in_flutter/pages/preferences_page.dart';
 import 'package:google_maps_in_flutter/pages/login_page.dart';
 import '../controllers/map_controller.dart';
 import '../container_classes/pin.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -27,6 +28,12 @@ class _MapPageState extends State<MapPage>
 
   void _onMapCreated(GoogleMapController controller) {
     mapController.googController = controller;
+    String mapStyle;
+
+    rootBundle.loadString('assets/map_style.json').then((string) {
+    mapStyle = string;});
+
+    mapController.googController.setMapStyle(mapStyle);
     loadPins();
     //print("Map Created");
   }

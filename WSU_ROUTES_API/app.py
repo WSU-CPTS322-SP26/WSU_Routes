@@ -3,11 +3,25 @@ from flask import Flask, request, jsonify, render_template, url_for, redirect, R
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import uuid #for generating unique ids for profiles, pins, and events
+from flask_mail import Mail, Message
+import random
+from datetime import datetime, timedelta
 #setup for database
 
 app = Flask(__name__)
 app.debug = True
 CORS(app)
+
+#setup for email auth + password reset features 
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME', 'sideemailformrtheman@gmail.com')    
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD', 'xlav catc cnen sioo')
+app.config['MAIL_DEFAULT_SENDER'] = app.config['MAIL_USERNAME']
+mail = Mail(app)
+
 
 database = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///my_database.db'
