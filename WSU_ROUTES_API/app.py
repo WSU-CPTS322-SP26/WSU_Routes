@@ -192,7 +192,7 @@ def register():
 
     return jsonify({"id": new_user.id}), 200
 
-@app.route("/login", methods = ['GET'])
+@app.route("/login", methods = ['POST'])
 def login():
     data = request.get_json()
 

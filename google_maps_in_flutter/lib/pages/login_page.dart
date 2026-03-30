@@ -16,7 +16,7 @@ class _LoginPageState extends State<LoginPage>{
   final passwordController = TextEditingController();
   bool isLogin = true; 
 
-  Future<void> submit() async {
+  Future<void> submit() async { //buggy, need to verify login
     print("Submission function called"); 
     
     final email = emailController.text.trim();
