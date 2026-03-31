@@ -72,10 +72,10 @@ class MapController extends CustomInfoWindowController
                 ],
               ),
             ),
-            LatLng(46.73102477481042, -117.16225563581636)
+            LatLng(pin.latitude, pin.longitude)
           );
         },
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         )
       );
     }
@@ -95,11 +95,164 @@ class MapController extends CustomInfoWindowController
     List<LatLng> latlngs = [];
  
     //CUB
-    names.add("Compton Union Building");
-    desc.add("Social center, also named the CUB.");
+    names.add("Compton Union Building (CUB)");
+    desc.add("Social center that holds majority of student events. Large areas for studying and food court.");
     latlngs.add(LatLng(46.73102477481042, -117.16225563581636));
 
-    //
+    //Abelson
+    names.add("Abelson Hall");
+    desc.add("Location of School of Biological Sciences, plus its own rooftop greenhouse. Basement is home to Conner Natural History Museum.");
+    latlngs.add(LatLng(46.72977149767806, -117.16531272324524));
+
+    //CUE
+    names.add("Smith Center for Undergraduate Education (CUE)");
+    desc.add("Home of varied WSU programs including the writing program, common reading program, and Writing Center.");
+    latlngs.add(LatLng(46.72980157164282, -117.1616604934845));
+
+    //Engineering Building
+    names.add("Electrical-Mechanical Engineering Building");
+    desc.add("Home of School of Electrical Engineering and Computer Science, School of Mechanical and Materials Engineering..");
+    latlngs.add(LatLng(46.73061483343902, -117.16935272877728));
+
+    //fulmer hall
+    names.add("Fulmer Hall");
+    desc.add("Known as the Chemestry Building, Fulmer Hall is full of chem labs and said to have radioactive labs.");
+    latlngs.add(LatLng(46.729357873237696, -117.16431699358178));
+
+    //kimbrough
+    names.add("Kimbrough Hall");
+    desc.add("Contains the School of Music and campus listening library, its crazy.");
+    latlngs.add(LatLng(46.73221746462215, -117.16501034467741));
+
+    //spark
+    names.add("The Spark: Academic Innovation Hub");
+    desc.add("STEM learning center, creative headquarters, full of classrooms and study rooms.");
+    latlngs.add(LatLng(46.72816320466636, -117.16553630175655));
+
+    //terrell library
+    names.add("Holland and Terrell Libraries");
+    desc.add("The big libraries on campus full of manuscripts, archives, collections, and study rooms. Connects to the CUB.");
+    latlngs.add(LatLng(46.73136830475717, -117.1637646504211));
+
+    //Todd hall
+    names.add("Todd Hall");
+    desc.add("Full of a bunch of classrooms, carson college of business, and miscellaneous empty classrooms to make advantage of.");
+    latlngs.add(LatLng(46.729904899183694, -117.16390513443224));
+
+    //beasley coliseum
+    names.add("Beasley Coliseum");
+    desc.add("The cougar Coliseum, used for basketball games, job fairs, and concerts.");
+    latlngs.add(LatLng(46.73526391682103, -117.1580793145299));
+
+    //Stephenson 
+    names.add("Stephenson Complex");
+    desc.add("With its own gym, this dorm has three wing towers. Nobody talks about the east tower, nobody likes it.");
+    latlngs.add(LatLng(46.726039307181416, -117.16596636455296));
+
+    //owen library
+    names.add("Owen Science and Engineering Library");
+    desc.add("Engineering library full of engineering books, who could've thought.");
+    latlngs.add(LatLng(46.72887649686552, -117.16542457164435));
+
+    //art museum
+    names.add("Jordan Schnitzer Museum of Art");
+    desc.add("The crimson cube on campus that has rotating exhibition of art.");
+    latlngs.add(LatLng(46.73037064635235, -117.16168599456348));
+
+    //stadium
+    names.add("Martin Stadium");
+    desc.add("Big football stadium with 40,000 seats, Go Cougs!");
+    latlngs.add(LatLng(46.73188120791032, -117.1605745759999));
+
+    //Daggy Hall
+    names.add("Daggy Hall");
+    desc.add("Home to Jones Theatre, School of Design and Construction, hangout spot for airforce cadets.");
+    latlngs.add(LatLng(46.7294873960086, -117.1675974693327));
+
+    //Regenets Hall
+    names.add("Regents Hall");
+    desc.add("One of the big dorms on northside, its alright.");
+    latlngs.add(LatLng(46.73406718969151, -117.16239987995246));
+
+    //Northside dorm
+    names.add("Northside Residence Hall");
+    desc.add("The other big dorm on northside, its also alright.");
+    latlngs.add(LatLng(46.734321014587785, -117.16122388880197));
+
+    //Northside cafe
+    names.add("Northside Cafe");
+    desc.add("Cafeteria for northside, ok food, and directly connected to northside dorm");
+    latlngs.add(LatLng(46.734513804570625, -117.16279984915086));
+
+    //bear center
+    names.add("Bear Center");
+    desc.add("Home of the bears, the only grizzly bears research center of its kind in the US.");
+    latlngs.add(LatLng(46.7297220167878, -117.13891035779392));
+
+    //Chinook
+    names.add("Chinook Student Center");
+    desc.add("Full of hangout spots, food, study spots, and a full guym.");
+    latlngs.add(LatLng(46.73276172977122, -117.16549472558029));
+
+    //Bryan Clock tower
+    names.add("Bryan Clock Tower");
+    desc.add("Beautiful, ain't it.");
+    latlngs.add(LatLng(46.7313651470953, -117.16525190463996));
+
+    //Southside Routundra
+    names.add("Southside Rotunda");
+    desc.add("Upstairs is home to a cafeteria, while downstairs is a full convience store with ice cream.");
+    latlngs.add(LatLng(46.727091501242406, -117.16322176773734));
+
+    //wilson short
+    names.add("Wilson-Short Hall");
+    desc.add("Home of Dept of Criminal Justice, but have classrooms for anything.");
+    latlngs.add(LatLng(46.7303367891336, -117.16248468406896));
+
+    //vet center
+    names.add("Vet and Biomed Research Building");
+    desc.add("Full of devices you've never seen in your life.");
+    latlngs.add(LatLng(46.728801157121296, -117.15916603801023));
+
+    //Ferdinand's 
+    names.add("Ferdinand's Ice Cream Shoppe");
+    desc.add("Class coug ice cream joint.");
+    latlngs.add(LatLng(46.732664852010664, -117.15483937915336));
+
+    //Cleveland Hall
+    names.add("Cleveland Hall");
+    desc.add("Home to college of education, and the math learning center.");
+    latlngs.add(LatLng(46.72865027288818, -117.16622244357157));
+
+    //Rogers hall
+    names.add("Rogers Hall");
+    desc.add("Big ol dorm, paired with Orton Hall.");
+    latlngs.add(LatLng(46.725931709494745, -117.16446082223122));
+
+    //Orton Hall
+    names.add("Orton Hall");
+    desc.add("Another southside dorm, paired with Rogers Hall");
+    latlngs.add(LatLng(46.72596480472493, -117.16336111652332));
+
+    //webster hall
+    names.add("Webster Hall");
+    desc.add("Known as the physics building, home of physics department and assorted classrooms.");
+    latlngs.add(LatLng(46.72869257727076, -117.1636940016231));
+
+    //hillside cafe
+    names.add("Hillside Cafe");
+    desc.add("Main cafeteria for hillside, got good calzones.");
+    latlngs.add(LatLng(46.73279866106276, -117.16682471224367));
+
+    //Neill Hall
+    names.add("Neill Hall");
+    desc.add("Big dorm named after Judge Thomas Neill");
+    latlngs.add(LatLng(46.72830861927196, -117.16378810950211));
+
+    //health services
+    names.add("Cougar Health Services");
+    desc.add("Building that provides health services to all coug at WSU.");
+    latlngs.add(LatLng(46.72741029374321, -117.16614112257369));
 
     for(int i = 0; i < names.length; i++)
     {
