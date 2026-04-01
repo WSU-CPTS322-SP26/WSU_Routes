@@ -5,115 +5,70 @@ import 'package:http/http.dart' as http;
 
 class PreferencesPage extends StatefulWidget {
   final String userId;
-  const PreferencesPage({required this.userId}); //need to take in id as parameter to properly mod db
+  const PreferencesPage({required this.userId});
 
   @override
   State<PreferencesPage> createState() => PrefState();
 }
 
 class PrefState extends State<PreferencesPage> {
+  late final PreferencesController controller;
 
-  bool isNotif = true; //on by default
-  bool isClub = false;
-  bool locationPerm = false;
-
-  //http request destinations
-  final String baseUrl = 'http://10.0.2.2:5000';
-  //final PreferencesController controller = PreferencesController();
-
-
-  void onNotifChange(bool newVal) async {
-    setState(() => isNotif = newVal);
-    await http.put(
-      Uri.parse('$baseUrl/profile/${widget.userId}/notifOn'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'notifOn': newVal}),
-    );
-    //update();
-  }
-
-  void onClubChange(bool newVal) async {
-    //await controller.UpdateClub(newVal);
-    setState(() => isClub = newVal);
-      await http.put(
-      Uri.parse('$baseUrl/profile/${widget.userId}/isClub'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'isClub': newVal}),
-    );
-  }
-
-  void onLocationPerfChange(bool newVal) async {
-
-      setState(() => locationPerm = newVal);
-      await http.put(
-      Uri.parse('$baseUrl/profile/${widget.userId}/locationPermission'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'locationPermission': newVal}),
-    );
-  }
-
-  void update() {
-    setState(() {
-      // rebuild UI after controller updates value
-    });
+  @override
+  void initState() {
+    super.initState();
+    controller = PreferencesController(userId: widget.userId);
   }
 
   @override
-  Widget build(BuildContext context) //how the widget looks
-  {
-    
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Prefences Page")),
+      appBar: AppBar(title: const Text("Preferences Page")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              //title
-              "Options and Preferences:",
-              style: const TextStyle(fontSize: 24),
-            ),
+            const Text("Options and Preferences:", style: TextStyle(fontSize: 24)),
             Row(
-              //For Notifications changes
               children: [
-                Text("Notifications:", style: const TextStyle(fontSize: 24)),
+                const Text("Notifications:", style: TextStyle(fontSize: 24)),
                 const SizedBox(height: 20),
                 Switch(
-                  value: isNotif,
-                  onChanged: onNotifChange,
-                ), //switch for notif
-              ],
-            ),
-            Row(
-              //For change to club profile
-              children: [
-                Text("Club Profile:", style: const TextStyle(fontSize: 24)),
-                const SizedBox(height: 20),
-                Switch(
-                  value: isClub,
-                  onChanged: onClubChange,
-                ), //switch for club
-              ],
-            ),
-            Row(
-              //For change to location permissions
-              children: [
-                Text(
-                  "Give Location Permissions:",
-                  style: const TextStyle(fontSize: 24),
+                  value: controller.isNotif,
+                  onChanged: (newVal) async {
+                    await controller.onNotifChange(newVal);
+                    setState(() {});
+                  },
                 ),
-                const SizedBox(height: 20),
-                Switch(
-                  value: locationPerm,
-                  onChanged: onLocationPerfChange,
-
-
-
-                ), //switch for club
               ],
             ),
             Row(
-              //For change to location permissions
+              children: [
+                const Text("Club Profile:", style: TextStyle(fontSize: 24)),
+                const SizedBox(height: 20),
+                Switch(
+                  value: controller.isClub,
+                  onChanged: (newVal) async {
+                    await controller.onClubChange(newVal);
+                    setState(() {});
+                  },
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                const Text("Give Location Permissions:", style: TextStyle(fontSize: 24)),
+                const SizedBox(height: 20),
+                Switch(
+                  value: controller.locationPermission,
+                  onChanged: (newVal) async {
+                    await controller.onLocationPermChange(newVal);
+                    setState(() {});
+                  },
+                ),
+              ],
+            ),
+            Row(
               children: [
                 const SizedBox(height: 20),
                 ElevatedButton(
