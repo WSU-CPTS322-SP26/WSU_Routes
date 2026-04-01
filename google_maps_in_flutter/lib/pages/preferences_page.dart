@@ -1,91 +1,74 @@
 import 'package:flutter/material.dart';
 import '../controllers/preferences_controller.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class PreferencesPage extends StatefulWidget {
+  final String userId;
+  const PreferencesPage({required this.userId});
+
   @override
   State<PreferencesPage> createState() => PrefState();
 }
 
 class PrefState extends State<PreferencesPage> {
-  final PreferencesController controller = PreferencesController();
+  late final PreferencesController controller;
 
-  void onNotifChange(bool newVal) async {
-    await controller.UpdateNotif(newVal);
-
-    update();
-  }
-
-  void onClubChange(bool newVal) async {
-    await controller.UpdateClub(newVal);
-
-    update();
-  }
-
-  void onLocationPerfChange(bool newVal) async {
-    await controller.UpdateLocationPermissions(newVal);
-
-    update();
-  }
-
-  void update() {
-    setState(() {
-      // rebuild UI after controller updates value
-    });
+  @override
+  void initState() {
+    super.initState();
+    controller = PreferencesController(userId: widget.userId);
   }
 
   @override
-  Widget build(BuildContext context) //how the widget looks
-  {
-    
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Prefences Page")),
+      appBar: AppBar(title: const Text("Preferences Page")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              //title
-              "Options and Preferences:",
-              style: const TextStyle(fontSize: 24),
-            ),
+            const Text("Options and Preferences:", style: TextStyle(fontSize: 24)),
             Row(
-              //For Notifications changes
               children: [
-                Text("Notifications:", style: const TextStyle(fontSize: 24)),
+                const Text("Notifications:", style: TextStyle(fontSize: 24)),
                 const SizedBox(height: 20),
                 Switch(
                   value: controller.isNotif,
-                  onChanged: onNotifChange,
-                ), //switch for notif
+                  onChanged: (newVal) async {
+                    await controller.onNotifChange(newVal);
+                    setState(() {});
+                  },
+                ),
               ],
             ),
             Row(
-              //For change to club profile
               children: [
-                Text("Club Profile:", style: const TextStyle(fontSize: 24)),
+                const Text("Club Profile:", style: TextStyle(fontSize: 24)),
                 const SizedBox(height: 20),
                 Switch(
                   value: controller.isClub,
-                  onChanged: onClubChange,
-                ), //switch for club
+                  onChanged: (newVal) async {
+                    await controller.onClubChange(newVal);
+                    setState(() {});
+                  },
+                ),
               ],
             ),
             Row(
-              //For change to location permissions
               children: [
-                Text(
-                  "Give Location Permissions:",
-                  style: const TextStyle(fontSize: 24),
-                ),
+                const Text("Give Location Permissions:", style: TextStyle(fontSize: 24)),
                 const SizedBox(height: 20),
                 Switch(
                   value: controller.locationPermission,
-                  onChanged: onLocationPerfChange,
-                ), //switch for club
+                  onChanged: (newVal) async {
+                    await controller.onLocationPermChange(newVal);
+                    setState(() {});
+                  },
+                ),
               ],
             ),
             Row(
-              //For change to location permissions
               children: [
                 const SizedBox(height: 20),
                 ElevatedButton(
