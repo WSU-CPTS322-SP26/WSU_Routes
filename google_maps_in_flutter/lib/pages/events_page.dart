@@ -21,13 +21,13 @@ class EventState extends State<EventsPage> {
   }
 
   void loadInitalEvents() async {
-    await controller.InitalPublicEvents(list); //populates list
+    await controller.InitalEvents(list); //populates list
     update();
   }
 
   void onCreateEvent() async {
     await controller.PostEvent(tempEvent);
-    await controller.InitalPublicEvents(list);
+    await controller.InitalEvents(list);
 
     update();
   }
@@ -49,6 +49,7 @@ class EventState extends State<EventsPage> {
 
   void update() {
     setState(() {
+      tempEvent;
       // rebuild UI after controller updates value
     });
   }
@@ -148,6 +149,13 @@ class EventState extends State<EventsPage> {
           ],
         ),
       ),
+      floatingActionButton: 
+            FloatingActionButton(
+                mini: false,
+                onPressed: () => {loadInitalEvents()},
+                backgroundColor: Colors.white,
+                child: Icon(Icons.loop),
+              ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_in_flutter/container_classes/profile.dart';
 import 'dart:convert';
 import'package:http/http.dart' as http;
 import 'package:google_maps_in_flutter/main.dart';
@@ -51,6 +52,10 @@ class _LoginPageState extends State<LoginPage>{
           context,
           MaterialPageRoute(builder: (_) => const MapPage()),
         );
+
+        final profile = CurProfile(); //Get's instance of singleton 
+        profile.email = emailController.text.trim(); //set email
+
       } else {
         print("Server error, rejected request: ${response.body}");
       }
