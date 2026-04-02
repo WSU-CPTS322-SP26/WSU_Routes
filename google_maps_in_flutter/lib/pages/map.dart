@@ -9,6 +9,9 @@ import 'package:google_maps_in_flutter/custom_icons_icons.dart';
 import 'package:google_maps_in_flutter/pages/login_page.dart';
 import '../controllers/map_controller.dart';
 import '../container_classes/pin.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:custom_info_window/custom_info_window.dart';
+
 
 class MapPage extends StatefulWidget {
   final String userId;
@@ -23,11 +26,17 @@ class _MapPageState extends State<MapPage> {
   late MapController mapController = new MapController();
   int uiState = 0;
   Set<Marker> markers = {};
+  String mapStyle = "";
+  
 
   final LatLng _center = const LatLng(46.731283215181065, -117.16155184037612);
 
-  void _onMapCreated(GoogleMapController controller) {
+  void _onMapCreated(GoogleMapController controller) async{
     mapController.googController = controller;
+    mapController.googleMapController = controller;
+
+    mapStyle = await rootBundle.loadString('assets/styleformap.json');
+    mapController.googController.setMapStyle(mapStyle);
     loadPins();
     //print("Map Created");
   }
@@ -38,6 +47,7 @@ class _MapPageState extends State<MapPage> {
 
   Future<void> loadPins() async {
     await mapController.getPins(markers); //populates list
+    markers.addAll(mapController.buildingMarkers);
     setState(() {
       markers;
     });
@@ -190,11 +200,29 @@ class _MapPageState extends State<MapPage> {
           ),
         ],
       ),
-      body: GoogleMap(
+      body: 
+      Stack(
+        children: [
+          GoogleMap(
         onMapCreated: _onMapCreated,
+        style: mapStyle,
         initialCameraPosition: CameraPosition(target: _center, zoom: 17.0),
         markers: markers,
+          onTap: (_) {
+            mapController.hideInfoWindow!();
+          },
+          onCameraMove: (position) {
+            mapController.onCameraMove!();
+          },
       ),
+      
+      CustomInfoWindow(
+        controller: mapController,
+        height: 150, // Customize height and width
+        width: 200,
+        offset: 0, // Adjust offset as needed
+      ),
+      ]),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           if (index == 3) {

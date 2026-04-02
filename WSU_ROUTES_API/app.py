@@ -3,6 +3,9 @@ from flask import Flask, request, jsonify, render_template, url_for, redirect, R
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import uuid #for generating unique ids for profiles, pins, and events
+from flask_mail import Mail, Message
+import random
+from datetime import datetime, timedelta
 #setup for database
 
 app = Flask(__name__)
