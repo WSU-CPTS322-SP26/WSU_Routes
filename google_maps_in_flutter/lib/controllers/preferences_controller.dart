@@ -1,30 +1,26 @@
 import '../api_helper/preference_helper.dart';
 
-class PreferencesController
-{
-  bool isNotif = true;//defaults, but once we have profile creation, will have get request to get the profile's preferences
+class PreferencesController {
+  final String userId;
+
+  bool isNotif = true;
   bool isClub = false;
-  bool locationPermission = true;
+  bool locationPermission = false;
 
-  Future<void> UpdateNotif(bool newNotif) async
-  {
-    isNotif = newNotif;
-    print(newNotif);
-    PreferenceHelper.NotifChange(newNotif);
+  PreferencesController({required this.userId});
+
+  Future<void> onNotifChange(bool newVal) async {
+    isNotif = newVal;
+    await PreferenceHelper.updateNotif(userId, newVal);
   }
 
-  Future<void> UpdateClub(bool newClub) async
-  {
-    isClub = newClub;
-    print(newClub);
-    PreferenceHelper.ClubChange(newClub);
+  Future<void> onClubChange(bool newVal) async {
+    isClub = newVal;
+    await PreferenceHelper.updateClub(userId, newVal);
   }
 
-  Future<void> UpdateLocationPermissions(bool newLocationPermission) async
-  {
-    locationPermission = newLocationPermission;
-    print(newLocationPermission);
-    PreferenceHelper.LocationPermissionChange(newLocationPermission);
+  Future<void> onLocationPermChange(bool newVal) async {
+    locationPermission = newVal;
+    await PreferenceHelper.updateLocationPermission(userId, newVal);
   }
-
 }
