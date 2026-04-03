@@ -34,7 +34,7 @@ dataBase = SQLAlchemy(app)
 
 class Profile(dataBase.Model): #inital profile class
     __tablename__ = 'profiles'
-    id = dataBase.Column(dataBase.String, primary_key=True, unique=True, nullable=False) #different from event and pin id
+    id = dataBase.Column(dataBase.String, primary_key=True, nullable=False) #different from event and pin id
     name = dataBase.Column(dataBase.String, unique=True)
     email = dataBase.Column(dataBase.String)
     notifOn = dataBase.Column(dataBase.Boolean)
@@ -48,21 +48,21 @@ class Profile(dataBase.Model): #inital profile class
 
 class Pin(dataBase.Model): #inital pin class
     __tablename__ = 'pins'
-    id = dataBase.Column(dataBase.String, primary_key=True, unique=True, nullable=False) #different from event and profile id
+    id = dataBase.Column(dataBase.String, nullable=False) #different from event and profile id
     name = dataBase.Column(dataBase.String)
     isPublic = dataBase.Column(dataBase.Boolean)
     locationLat = dataBase.Column(dataBase.Float)
     locationLong = dataBase.Column(dataBase.Float)
-    description = dataBase.Column(dataBase.String)
+    description = dataBase.Column(dataBase.String, primary_key=True)
 
 class Event(dataBase.Model):
     __tablename__ = 'events'
-    id = dataBase.Column(dataBase.String, primary_key=True, unique=True, nullable=False) #different from pin and profile id
+    id = dataBase.Column(dataBase.String, nullable=False) #different from pin and profile id
     name = dataBase.Column(dataBase.String)
     pinId = dataBase.Column(dataBase.String) 
     isPublic = dataBase.Column(dataBase.Boolean)
     date = dataBase.Column(dataBase.String) #Maybe just in format MM/DD/YYYY
-    description = dataBase.Column(dataBase.String)
+    description = dataBase.Column(dataBase.String, primary_key=True)
 
 class Comment(dataBase.Model):
     __tablename__ = 'comments'
@@ -81,9 +81,9 @@ def GenerateID():#will update
 
 #write this
 def CreateEvent(name, isPublic, date, description):
-    tempEvent = Event.query.filter(Event.id == 'name').first() # 'function' object has no attribute 'query'
+    tempEvent = Event.query.filter(Event.id == name).first() # 'function' object has no attribute 'query'
     if not tempEvent:
-        newEvent = Event(id= name, name=name, pinId = GenerateID(), isPublic=isPublic, date=date, description=description)#need to change id to actually be some generated ID
+        newEvent = Event(id= name, name=name, pinId = GenerateID(), isPublic=True, date=date, description=description)#need to change id to actually be some generated ID
         dataBase.session.add(newEvent)
         dataBase.session.commit()
     else:
@@ -106,13 +106,23 @@ def is_mail_configured(): #setup outgoing email for codes
     placeholder_user = username == 'your_gmail@gmail.com'
     placeholder_pass = password == 'your_app_password'
     return bool(username and password) and not (placeholder_user or placeholder_pass)
+
+def CreatePrivateEvent(name, email, date, description):
+    newEvent = Event(id= email, name=name, pinId = GenerateID(), isPublic=False, date=date, description=description)#need to change id to actually be some generated ID
+    dataBase.session.add(newEvent)
+    dataBase.session.commit()
     
 def CreatePin(name, isPublic, locationLat, locationLong, description):
     newPin = Pin(id= name, name=name, isPublic=isPublic, locationLat=locationLat, locationLong=locationLong, description=description)
     dataBase.session.add(newPin)
     dataBase.session.commit()
-#Queries
 
+def CreatePrivatePin(name, locationLat, locationLong, description, email):
+    newPin = Pin(id= email, name=name, isPublic=False, locationLat=locationLat, locationLong=locationLong, description=description)
+    dataBase.session.add(newPin)
+    dataBase.session.commit()
+
+#Queries
 @app.route("/profile/<id>", methods = ['GET'])
 def ProfilePage(id):
     if(request.method == 'GET'):
@@ -401,6 +411,35 @@ def GetPubEvents():
             return ('', 200)
     else:
         return ('', 204)
+    
+@app.route("/events/private/<email>", methods = ['GET', 'POST'])
+def GetPrivateEvents(email):
+    events = Event.query.filter(Event.id == email).order_by(Event.date).all()
+    response = {}
+    num = 0
+    if(request.method == 'GET' and events): #checks if is a get request and if events isn't empty
+        for event in events:#could break here, not correct syntax maybe
+            response.update({
+                "id" + str(num): event.id,
+                "name" + str(num): event.name,
+                "pinId" + str(num): event.pinId,
+                "date" + str(num): event.date,
+                "description" + str(num): event.description
+            })
+            num += 1
+        response.update({"count": num})
+        print(response) # to check
+        return jsonify(response)
+    elif(request.method == 'POST'):
+        data = request.get_json()
+        if data is None:
+            return "No data",214
+        else:
+            CreatePrivateEvent(data['name'], data['email'], data['date'], data['description'])
+            return ('', 200)
+    else:
+        return ('', 204)
+
 
 @app.route("/pins/public", methods = ['GET', 'POST'])
 def Pins():
@@ -429,6 +468,38 @@ def Pins():
             return ('', 200)
     else:
         return ('', 204)
+
+
+@app.route("/pins/private/<name>", methods = ['GET', 'POST'])
+def PrivatePins(name):
+    pins = Pin.query.filter(Pin.id == name).all()
+    response = {}
+    num = 0
+    if(request.method == 'GET'): 
+        for pin in pins:
+            response.update({
+                "id" + str(num): pin.id,
+                "name" + str(num): pin.name,
+                "locationLat" + str(num): pin.locationLat,
+                "locationLong" + str(num): pin.locationLong, 
+                "description" + str(num): pin.description
+            })
+            num += 1
+        response.update({"count": num}) 
+        print(response) # to check
+        return jsonify(response)
+    elif(request.method == 'POST'):
+        data = request.get_json()
+        if data is None:
+            return "No data",214
+        else:
+            CreatePrivatePin(data['name'], data['locationLat'], data['locationLong'], data['description'], data['email'])
+            return ('', 200)
+    else:
+        return ('', 204)
+
+
+
 
 if __name__ == "__main__":
 

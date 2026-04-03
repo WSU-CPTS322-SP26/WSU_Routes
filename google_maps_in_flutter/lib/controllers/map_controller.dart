@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_in_flutter/container_classes/profile.dart';
 import '../container_classes/pin.dart';
 import '../api_helper/maps_helper.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -37,17 +38,26 @@ class MapController extends CustomInfoWindowController
   {
     LatLng coords = await getCamPosLat(context);
     Pin tempPin = Pin(name, isPublic, description, coords.latitude, coords.longitude);
-    helper.addNewPin(tempPin);
+    if(isPublic)
+    {
+      helper.addNewPin(tempPin);
+    }
+    else
+    {
+      helper.addPrivatePin(tempPin);
+    }
+
   }
 
   Future<void> getPins(Set<Marker> markers) async
   {
     List<Pin> list = [];
     final pins = await MapsHelper.getPublicPins();
+    final privatePins = await MapsHelper.getPrivatePins();
     list.addAll(pins);
 
     markers.clear();
-    for(var pin in pins )
+    for(var pin in pins)
     {
       print(pin.formatToPrint() + "\n");
 
@@ -76,6 +86,39 @@ class MapController extends CustomInfoWindowController
           );
         },
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+        )
+      );
+    }
+
+    for(var pin in privatePins)
+    {
+      print(pin.formatToPrint() + "\n");
+
+      markers.add(Marker(
+        markerId: MarkerId(pin.name),
+        position: LatLng(pin.latitude, pin.longitude),
+                onTap: () 
+        {
+          addInfoWindow!(
+            Container(
+              decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [BoxShadow(color: Colors.grey, blurRadius: 4)],
+        ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(pin.name, style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text(pin.description)
+                ],
+              ),
+            ),
+            LatLng(pin.latitude, pin.longitude)
+          );
+        },
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
         )
       );
     }
