@@ -79,10 +79,9 @@ Second, to run the api on your computer locally
 ## Known Problems
 The following are some of the known major issues with our program. The errors will be addressed during our next sprint. 
 
--Preference page can be navigated to via the button in the top left of the map interface, however the button to return back to 
-the map has not yet been implemented. The app has to be restarted to return to main page. (preferences_page.dart)
+-on app startup the pins wont show up at first. This can be resolved by logging out and logging back in.
 
--Event page can only be navigated to by commenting out existing runApp call and uncommenting the above runApp call (that contains the event page widget) (main.dart)
+-forgot password button is off center
 
 -Invalid emails and insecure passwords can be used. The user will still be stored in the database. Security measures to be added. (login_page.dart)
 
