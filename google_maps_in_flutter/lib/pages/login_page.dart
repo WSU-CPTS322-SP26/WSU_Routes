@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:google_maps_in_flutter/container_classes/profile.dart';
-=======
 import 'package:google_maps_in_flutter/pages/register_page.dart';
 import 'package:google_maps_in_flutter/pages/verification_page.dart';
 import 'package:google_maps_in_flutter/pages/password_reset_page.dart';
->>>>>>> 6d0f7c62a0dc46b48a6aac5f3836fe1a24aa2954
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
