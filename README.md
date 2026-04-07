@@ -34,9 +34,7 @@ With prerequisites installed, the following commands will setup up the app.
 Setup backend server:
 `cd WSU_ROUTES_API` 
 
-Setup Email Verif Sender:
-$env:MAIL_USERNAME="youremail@gmail.com"
-$env:MAIL_PASSWORD="16-digit passcode"
+Setup Email Verif Sender: #now done automatically
 
 `python -m venv venv`
 `venv\Scripts\activate` //windows command
