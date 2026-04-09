@@ -15,7 +15,8 @@ import 'package:custom_info_window/custom_info_window.dart';
 
 class MapPage extends StatefulWidget {
   final String userId;
-  const MapPage({super.key, required this.userId});
+  final String email;
+  const MapPage({super.key, required this.userId, required this.email});
 
   @override
   State<MapPage> createState() => _MapPageState();
@@ -234,7 +235,12 @@ class _MapPageState extends State<MapPage> {
           if (index == 4) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => PreferencesPage(userId: widget.userId)),
+              MaterialPageRoute(
+                builder: (_) => PreferencesPage(
+                  userId: widget.userId,
+                  email: widget.email,
+                ),
+              ),
             );
           }
         },

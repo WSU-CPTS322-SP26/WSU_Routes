@@ -103,9 +103,9 @@ def CreateEvent(name, isPublic, date, description):
 def generate_otp(): #generate random 6 dig code
     return str(random.randint(100000, 999999))
 
-
+#want to make specialized messages for welcome vs password change 
 def send_verification_email(email, otp): #send email with verif code for email verif or password reset
-    msg = Message("Your verification code", recipients=[email])
+    msg = Message("WSU Routes", recipients=[email])
     msg.body = f"Your verification code is: {otp}"
     mail.send(msg)
 

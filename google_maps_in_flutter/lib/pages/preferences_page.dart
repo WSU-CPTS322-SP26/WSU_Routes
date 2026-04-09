@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import '../controllers/preferences_controller.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:google_maps_in_flutter/pages/password_reset_page.dart';
 
 class PreferencesPage extends StatefulWidget {
   final String userId;
-  const PreferencesPage({required this.userId});
+  final String email;
+  const PreferencesPage({required this.userId, required this.email});
 
   @override
   State<PreferencesPage> createState() => PrefState();
@@ -75,6 +75,14 @@ class PrefState extends State<PreferencesPage> {
                   child: const Text('Reset Password'),
                   onPressed: () {
                     print('Will send out email to reset password');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => PasswordResetPage(
+                          initialEmail: widget.email,
+                        ),
+                      ),
+                    );
                   },
                 ),
               ],

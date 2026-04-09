@@ -58,14 +58,15 @@ class _LoginPageState extends State<LoginPage> {
       if (response.statusCode == 200) {//success
         final body = jsonDecode(response.body); //retrieve user id (allows preference changes)
         final String userId = body['id'];
+        final profile = CurProfile(); //Get's instance of singleton 
+        profile.email = email;
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => MapPage(userId: userId)),
+          MaterialPageRoute(
+            builder: (_) => MapPage(userId: userId, email: email),
+          ),
         );
-
-        final profile = CurProfile(); //Get's instance of singleton 
-        profile.email = emailController.text.trim(); //set email
 
       } else {
         //may add specific message to differentiate if email exists but password is wrong vs email dne
