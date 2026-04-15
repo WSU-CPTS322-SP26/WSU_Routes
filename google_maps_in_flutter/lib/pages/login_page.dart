@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> submit() async {
     setState(() {
-      //default state, wait for input no current errors
+      // default state, wait for input no current errors
       _isLoading = true;
       _errorMessage = null;
     });
