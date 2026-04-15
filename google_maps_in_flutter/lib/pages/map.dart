@@ -7,6 +7,7 @@ import 'package:google_maps_in_flutter/pages/preferences_page.dart';
 import 'package:google_maps_in_flutter/pages/events_page.dart';
 import 'package:google_maps_in_flutter/custom_icons_icons.dart';
 import 'package:google_maps_in_flutter/pages/login_page.dart';
+import 'package:google_maps_in_flutter/api_helper/preference_helper.dart';
 import '../controllers/map_controller.dart';
 import '../container_classes/pin.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -28,9 +29,25 @@ class _MapPageState extends State<MapPage> {
   int uiState = 0;
   Set<Marker> markers = {};
   String mapStyle = "";
+  bool isClubUser = false;
   
 
   final LatLng _center = const LatLng(46.731283215181065, -117.16155184037612);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadClubStatus();
+  }
+
+  Future<void> _loadClubStatus() async {
+    final bool clubStatus = await PreferenceHelper.getClubStatus(widget.userId);
+    if (!mounted) return;
+
+    setState(() {
+      isClubUser = clubStatus;
+    });
+  }
 
   void _onMapCreated(GoogleMapController controller) async{
     mapController.googController = controller;
@@ -186,8 +203,17 @@ class _MapPageState extends State<MapPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Map Sample App"),
+        title: const Text("WSU Routes"),
         actions: [
+          if (isClubUser) //show club icon only when isClub is true in db
+            const Padding(
+              padding: EdgeInsets.only(right: 8.0),
+              child: Icon(
+                Icons.groups_2,
+                size: 20,
+                semanticLabel: 'Club account',
+              ),
+            ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
@@ -225,7 +251,7 @@ class _MapPageState extends State<MapPage> {
       ),
       ]),
       bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
+        onDestinationSelected: (int index) async {
           if (index == 3) {
             Navigator.push(
               context,
@@ -233,7 +259,7 @@ class _MapPageState extends State<MapPage> {
             );
           }
           if (index == 4) {
-            Navigator.push(
+            await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => PreferencesPage(
@@ -242,6 +268,7 @@ class _MapPageState extends State<MapPage> {
                 ),
               ),
             );
+            _loadClubStatus();
           }
         },
         destinations: [

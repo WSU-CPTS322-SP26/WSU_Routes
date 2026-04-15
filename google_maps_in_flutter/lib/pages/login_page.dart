@@ -102,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Login")),
+      appBar: AppBar(title: Text("WSU Routes Login")),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
