@@ -1,17 +1,17 @@
-// Generative AI was utilized to generate this code
+// modifed attribute names
 import 'package:flutter/material.dart';
 
 class RoomNode {
   final String id;             // e.g. "entrance", "hallway_A", "101"
   final String label;          // display name shown in UI, e.g. "Room 101"
-  final Offset pos;            // pixel coords matching the SVG viewBox
-  final List<String> neighbors; // IDs of directly connected nodes
+  final Offset position;            // pixel coords matching the SVG viewBox
+  final List<String> neighborIDs; // IDs of directly connected nodes
 
   const RoomNode({
     required this.id,
     required this.label,
-    required this.pos,
-    required this.neighbors,
+    required this.position,
+    required this.neighborIDs,
   });
 }
 
@@ -31,7 +31,7 @@ class BuildingGraph {
   List<Offset> pathToOffsets(List<String> path) {
     return path
         .where((id) => nodes.containsKey(id))
-        .map((id) => nodes[id]!.pos)
+        .map((id) => nodes[id]!.position)
         .toList();
   }
 }
