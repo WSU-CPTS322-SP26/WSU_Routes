@@ -7,6 +7,8 @@ import '../container_classes/pin.dart';
 import '../api_helper/maps_helper.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:custom_info_window/custom_info_window.dart';
+import '../screens/building_map_screen.dart';
+ 
 
 class MapController extends CustomInfoWindowController {
   late GoogleMapController googController;
@@ -450,12 +452,9 @@ class MapController extends CustomInfoWindowController {
                             child: SizedBox(
                               width: double.maxFinite,
                               height: double.maxFinite,
-                              child: InteractiveViewer(
-                                panEnabled: true,
-                                scaleEnabled: true,
-                                boundaryMargin: EdgeInsets.all(500),
-                                child: images[i]
-                              ),
+                              child: BuildingMapScreen(
+                                buildingName: names[i],
+                              ), // replaces InteractiveViewer
                             ),
                           ),
                         );
