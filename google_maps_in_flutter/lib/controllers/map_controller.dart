@@ -159,7 +159,7 @@ class MapController extends CustomInfoWindowController {
     List<LatLng> latlngs = [];
     List<CustomPainter> painters = [];
     
-    List<SvgPicture> svgs = [];
+    List<String> svgNames = [];
     //CUB
     names.add("Compton Union Building (CUB)");
     desc.add(
@@ -167,7 +167,7 @@ class MapController extends CustomInfoWindowController {
     );
     latlngs.add(LatLng(46.73102477481042, -117.16225563581636));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //Abelson
     names.add("Abelson Hall");
@@ -176,7 +176,7 @@ class MapController extends CustomInfoWindowController {
     );
     latlngs.add(LatLng(46.72977149767806, -117.16531272324524));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //CUE
     names.add("Smith Center for Undergraduate Education (CUE)");
@@ -185,7 +185,7 @@ class MapController extends CustomInfoWindowController {
     );
     latlngs.add(LatLng(46.72980157164282, -117.1616604934845));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //Engineering Building
     names.add("Electrical-Mechanical Engineering Building");
@@ -193,8 +193,8 @@ class MapController extends CustomInfoWindowController {
       "Home of School of Electrical Engineering and Computer Science, School of Mechanical and Materials Engineering..",
     );
     latlngs.add(LatLng(46.73061483343902, -117.16935272877728));
-    painters.add(EEMEPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    painters.add(BuildingPainter());
+    svgNames.add('assets/images/eeme_svg.svg');
 
     //fulmer hall
     names.add("Fulmer Hall");
@@ -203,7 +203,7 @@ class MapController extends CustomInfoWindowController {
     );
     latlngs.add(LatLng(46.729357873237696, -117.16431699358178));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //kimbrough
     names.add("Kimbrough Hall");
@@ -212,7 +212,7 @@ class MapController extends CustomInfoWindowController {
     );
     latlngs.add(LatLng(46.73221746462215, -117.16501034467741));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //spark
     names.add("The Spark: Academic Innovation Hub");
@@ -221,7 +221,7 @@ class MapController extends CustomInfoWindowController {
     );
     latlngs.add(LatLng(46.72816320466636, -117.16553630175655));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //terrell library
     names.add("Holland and Terrell Libraries");
@@ -230,7 +230,7 @@ class MapController extends CustomInfoWindowController {
     );
     latlngs.add(LatLng(46.73136830475717, -117.1637646504211));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //Todd hall
     names.add("Todd Hall");
@@ -239,7 +239,7 @@ class MapController extends CustomInfoWindowController {
     );
     latlngs.add(LatLng(46.729904899183694, -117.16390513443224));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //beasley coliseum
     names.add("Beasley Coliseum");
@@ -248,7 +248,7 @@ class MapController extends CustomInfoWindowController {
     );
     latlngs.add(LatLng(46.73526391682103, -117.1580793145299));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //Stephenson
     names.add("Stephenson Complex");
@@ -257,7 +257,7 @@ class MapController extends CustomInfoWindowController {
     );
     latlngs.add(LatLng(46.726039307181416, -117.16596636455296));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //owen library
     names.add("Owen Science and Engineering Library");
@@ -266,14 +266,14 @@ class MapController extends CustomInfoWindowController {
     );
     latlngs.add(LatLng(46.72887649686552, -117.16542457164435));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //art museum
     names.add("Jordan Schnitzer Museum of Art");
     desc.add("The crimson cube on campus that has rotating exhibition of art.");
     latlngs.add(LatLng(46.73037064635235, -117.16168599456348));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
 
     //stadium
@@ -281,7 +281,7 @@ class MapController extends CustomInfoWindowController {
     desc.add("Big football stadium with 40,000 seats, Go Cougs!");
     latlngs.add(LatLng(46.73188120791032, -117.1605745759999));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //Daggy Hall
     names.add("Daggy Hall");
@@ -290,21 +290,21 @@ class MapController extends CustomInfoWindowController {
     );
     latlngs.add(LatLng(46.7294873960086, -117.1675974693327));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //Regenets Hall
     names.add("Regents Hall");
     desc.add("One of the big dorms on northside, its alright.");
     latlngs.add(LatLng(46.73406718969151, -117.16239987995246));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //Northside dorm
     names.add("Northside Residence Hall");
     desc.add("The other big dorm on northside, its also alright.");
     latlngs.add(LatLng(46.734321014587785, -117.16122388880197));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
   
 
     //Northside cafe
@@ -314,7 +314,7 @@ class MapController extends CustomInfoWindowController {
     );
     latlngs.add(LatLng(46.734513804570625, -117.16279984915086));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //bear center
     names.add("Bear Center");
@@ -323,21 +323,21 @@ class MapController extends CustomInfoWindowController {
     );
     latlngs.add(LatLng(46.7297220167878, -117.13891035779392));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //Chinook
     names.add("Chinook Student Center");
     desc.add("Full of hangout spots, food, study spots, and a full guym.");
     latlngs.add(LatLng(46.73276172977122, -117.16549472558029));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //Bryan Clock tower
     names.add("Bryan Clock Tower");
     desc.add("Beautiful, ain't it.");
     latlngs.add(LatLng(46.7313651470953, -117.16525190463996));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //Southside Routundra
     names.add("Southside Rotunda");
@@ -346,7 +346,7 @@ class MapController extends CustomInfoWindowController {
     );
     latlngs.add(LatLng(46.727091501242406, -117.16322176773734));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //wilson short
     names.add("Wilson-Short Hall");
@@ -355,42 +355,42 @@ class MapController extends CustomInfoWindowController {
     );
     latlngs.add(LatLng(46.7303367891336, -117.16248468406896));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //vet center
     names.add("Vet and Biomed Research Building");
     desc.add("Full of devices you've never seen in your life.");
     latlngs.add(LatLng(46.728801157121296, -117.15916603801023));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //Ferdinand's
     names.add("Ferdinand's Ice Cream Shoppe");
     desc.add("Class coug ice cream joint.");
     latlngs.add(LatLng(46.732664852010664, -117.15483937915336));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //Cleveland Hall
     names.add("Cleveland Hall");
     desc.add("Home to college of education, and the math learning center.");
     latlngs.add(LatLng(46.72865027288818, -117.16622244357157));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //Rogers hall
     names.add("Rogers Hall");
     desc.add("Big ol dorm, paired with Orton Hall.");
     latlngs.add(LatLng(46.725931709494745, -117.16446082223122));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //Orton Hall
     names.add("Orton Hall");
     desc.add("Another southside dorm, paired with Rogers Hall");
     latlngs.add(LatLng(46.72596480472493, -117.16336111652332));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //webster hall
     names.add("Webster Hall");
@@ -399,28 +399,28 @@ class MapController extends CustomInfoWindowController {
     );
     latlngs.add(LatLng(46.72869257727076, -117.1636940016231));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //hillside cafe
     names.add("Hillside Cafe");
     desc.add("Main cafeteria for hillside, got good calzones.");
     latlngs.add(LatLng(46.73279866106276, -117.16682471224367));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //Neill Hall
     names.add("Neill Hall");
     desc.add("Big dorm named after Judge Thomas Neill");
     latlngs.add(LatLng(46.72830861927196, -117.16378810950211));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
 
     //health services
     names.add("Cougar Health Services");
     desc.add("Building that provides health services to all coug at WSU.");
     latlngs.add(LatLng(46.72741029374321, -117.16614112257369));
     painters.add(BuildingPainter());
-    svgs.add(SvgPicture.asset('assets/images/default image.svg'));
+    svgNames.add('assets/images/default image.svg');
     
     for (int i = 0; i < names.length; i++) {
       buildingMarkers.add(
@@ -456,7 +456,7 @@ class MapController extends CustomInfoWindowController {
                               height: double.maxFinite,
                               child: BuildingMapScreen(
                                 buildingName: names[i],
-                                svgImage: svgs[i],
+                                svgName: svgNames[i],
                                 painter: painters[i],
                               ), // replaces InteractiveViewer
                             ),

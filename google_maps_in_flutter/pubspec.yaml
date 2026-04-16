@@ -67,6 +67,7 @@ flutter:
     - assets/images/default image.png
     - assets/images/voiland-college-wayfinding-map.png
     - assets/images/default image.svg
+    - assets/images/eeme_svg.svg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

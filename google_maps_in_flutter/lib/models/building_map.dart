@@ -1,4 +1,3 @@
-// modifed attribute names
 import 'package:flutter/material.dart';
 
 class RoomNode {

@@ -1,15 +1,14 @@
-// modifed attributes and build method
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class BuildingMapScreen extends StatefulWidget {
   final String buildingName;
-  final SvgPicture svgImage;
+  final String svgName;
   final CustomPainter painter;
   const BuildingMapScreen({
     super.key,
     required this.buildingName,
-    required this.svgImage,
+    required this.svgName,
     required this.painter
   });
 
@@ -18,19 +17,24 @@ class BuildingMapScreen extends StatefulWidget {
 }
 
 class _BuildingMapScreenState extends State<BuildingMapScreen> {
-  // TODO: add selected room state and path result here
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.buildingName)),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset('assets/images/<building>.svg'),
-            CustomPaint(painter: widget.painter),
-          ],
+      body: InteractiveViewer(
+        panEnabled: true,
+        scaleEnabled: true,
+        boundaryMargin: EdgeInsets.all(500),
+        child: Center(
+          child: Stack(
+            children: [
+              SvgPicture.asset(widget.svgName),
+              Positioned.fill(
+                child: CustomPaint(painter: widget.painter),
+              ),
+            ],
+          ),
         ),
       ),
     );
