@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import uuid #for generating unique ids for profiles, pins, and events
 from flask_mail import Mail, Message
+from dotenv import load_dotenv
 import random
 from datetime import datetime, timedelta
 #setup for database
@@ -11,6 +12,15 @@ from datetime import datetime, timedelta
 app = Flask(__name__)
 app.debug = True
 CORS(app)
+
+load_dotenv()
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = app.config['MAIL_USERNAME']
+
+#just for debugging 
+print("MAIL USER:", os.getenv('MAIL_USERNAME'))
+print("MAIL PASS:", os.getenv('MAIL_PASSWORD'))
 
 #setup for email auth + password reset features 
 from flask_mail import Mail, Message
@@ -93,19 +103,19 @@ def CreateEvent(name, isPublic, date, description):
 def generate_otp(): #generate random 6 dig code
     return str(random.randint(100000, 999999))
 
-
+#want to make specialized messages for welcome vs password change 
 def send_verification_email(email, otp): #send email with verif code for email verif or password reset
-    msg = Message("Your verification code", recipients=[email])
+    msg = Message("WSU Routes", recipients=[email])
     msg.body = f"Your verification code is: {otp}"
     mail.send(msg)
 
 
 def is_mail_configured(): #setup outgoing email for codes
+    
     username = app.config.get('MAIL_USERNAME')
     password = app.config.get('MAIL_PASSWORD')
-    placeholder_user = username == 'your_gmail@gmail.com'
-    placeholder_pass = password == 'your_app_password'
-    return bool(username and password) and not (placeholder_user or placeholder_pass)
+
+    return bool(username and password)
 
 def CreatePrivateEvent(name, email, date, description):
     newEvent = Event(id= email, name=name, pinId = GenerateID(), isPublic=False, date=date, description=description)#need to change id to actually be some generated ID

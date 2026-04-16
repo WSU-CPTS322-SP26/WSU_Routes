@@ -39,8 +39,12 @@ dependencies:
   google_maps_flutter: ^2.14.0
   url_launcher: ^6.3.2
   custom_info_window: ^1.0.1
+  flex_color_scheme: ^8.4.0
 
 dev_dependencies:
+
+  flutter_launcher_icons: ^0.14.0
+  flutter_native_splash: ^2.4.0
   flutter_test:
     sdk: flutter
 
@@ -50,6 +54,19 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+
+flutter_native_splash:
+  color: "#9e1b32"
+  image: assets/WSURoutesIcon.png
+  android: true
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/WSURoutesIcon.png
+  adaptive_icon_background: "#9e1b32"
+  adaptive_icon_foreground: assets/WSURoutesIcon.png
+  min_sdk_android: 21
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -63,6 +80,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/styleformap.json
+    - assets/WSURoutesIcon.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -94,6 +112,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+
   fonts:
     - family: CustomIcons
       fonts:
