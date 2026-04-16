@@ -4,6 +4,8 @@ import 'package:google_maps_in_flutter/custom_icons_icons.dart';
 import 'package:google_maps_in_flutter/pages/events_page.dart';
 import 'package:google_maps_in_flutter/pages/preferences_page.dart';
 import 'package:google_maps_in_flutter/pages/login_page.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:google_maps_in_flutter/app_theme.dart'; //our custom color theme
 import 'pages/map.dart';
 
 void main() async{
@@ -25,11 +27,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-    theme: ThemeData( 
-    useMaterial3: true,
-    colorSchemeSeed: Colors.green[700],
-    ),
-    home: LoginPage() //direct to login page on boot
+      theme: AppTheme.lightTheme,
+      home: LoginPage(),
     );
   }
 }

@@ -59,7 +59,9 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
 
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (_) => MapPage(userId: userId)),
+          MaterialPageRoute(
+            builder: (_) => MapPage(userId: userId, email: widget.email),
+          ),
           (route) => false,
         );
       } else {
