@@ -64,7 +64,7 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future<void> loadPins() async {
-    await mapController.getPins(markers); //populates list
+    await mapController.getPins(markers, context); //populates list
     markers.addAll(mapController.buildingMarkers);
     setState(() {
       markers;
@@ -245,8 +245,8 @@ class _MapPageState extends State<MapPage> {
       
       CustomInfoWindow(
         controller: mapController,
-        height: 150, // Customize height and width
-        width: 200,
+        height: 200, // Customize height and width
+        width: 220,
         offset: 0, // Adjust offset as needed
       ),
       ]),

@@ -39,6 +39,7 @@ dependencies:
   google_maps_flutter: ^2.14.0
   url_launcher: ^6.3.2
   custom_info_window: ^1.0.1
+  flutter_svg: ^2.0.0
   flex_color_scheme: ^8.4.0
 
 dev_dependencies:
@@ -80,6 +81,10 @@ flutter:
   uses-material-design: true
   assets:
     - assets/styleformap.json
+    - assets/images/default image.png
+    - assets/images/voiland-college-wayfinding-map.png
+    - assets/images/default image.svg
+    - assets/images/eeme_svg.svg
     - assets/WSURoutesIcon.png
 
   # To add assets to your application, add an assets section, like this:
