@@ -98,6 +98,13 @@ class MapController extends CustomInfoWindowController {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Text(pin.description),
+                    IconButton( // button for mapping////////////////////////////////////////////////
+                      onPressed: () { //////////change this function/////////////////
+                      final Uri url = Uri.parse('https://www.google.com/maps/search/?api=1&query=${pin.latitude},${pin.longitude}');
+                      launchUrl(url, mode: LaunchMode.externalApplication);
+                      },
+                      icon: Icon(Icons.directions_sharp),//change this ////////////////////////////////////////////////
+                    ),
                   ],
                 ),
               ),
@@ -133,6 +140,13 @@ class MapController extends CustomInfoWindowController {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Text(pin.description),
+                    IconButton( // button for mapping////////////////////////////////////////////////
+                      onPressed: () { //////////change this function/////////////////
+                      final Uri url = Uri.parse('https://www.google.com/maps/search/?api=1&query=${pin.latitude},${pin.longitude}');
+                      launchUrl(url, mode: LaunchMode.externalApplication);
+                      },
+                      icon: Icon(Icons.directions_sharp),//change this ////////////////////////////////////////////////
+                    ),
                   ],
                 ),
               ),
@@ -464,6 +478,13 @@ class MapController extends CustomInfoWindowController {
                         );
                       },
                       icon: Icon(Icons.map),
+                    ),
+                    IconButton( // button for mapping////////////////////////////////////////////////
+                      onPressed: () { //////////change this function/////////////////
+                      final Uri url = Uri.parse('https://www.google.com/maps/search/?api=1&query=${latlngs[i].latitude},${latlngs[i].longitude}');
+                      launchUrl(url, mode: LaunchMode.externalApplication);
+                      },
+                      icon: Icon(Icons.directions_sharp),//change this ////////////////////////////////////////////////
                     ),
                   ],
                 ),

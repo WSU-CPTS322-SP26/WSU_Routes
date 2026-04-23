@@ -92,13 +92,13 @@ class _MapPageState extends State<MapPage> {
               FloatingActionButton(
                 mini: false,
                 onPressed: () => {UpdateUIState(1)},
-                backgroundColor: Colors.red,
+                backgroundColor: Color.fromRGBO(166 , 15, 45, 1),
                 child: Icon(Icons.add),
               ),
               FloatingActionButton(
                 mini: false,
                 onPressed: () => {loadPins()},
-                backgroundColor: Colors.white,
+                backgroundColor: Color.fromRGBO(166 , 15, 45, 1),
                 child: Icon(Icons.loop),
               ),
             ],
