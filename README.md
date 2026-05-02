@@ -91,3 +91,5 @@ The following are some of the known major issues with our program. The errors wi
 * Demo Video sprint 1: (https://www.youtube.com/watch?v=KJVz4lCVOP8)
 * [Sprint 2 Report](Sprint2Report.md)
 * Demo Video sprint 2: (https://www.youtube.com/watch?v=QoxzL1_WX18)
+* [Sprint 3 Report](Sprint3Report.md)
+* Demo Video sprint 3: (https://youtu.be/T4bEfws0mes)
